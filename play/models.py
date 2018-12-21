@@ -1,5 +1,100 @@
 from django.db import models
+from random import shuffle
 
+class Stage:
+    PREDEAL = 0
+    PREFLOP = 1
+    FLOP = 2
+    TURN = 3
+    RIVER = 4
+    
+
+class Game:
+    def __init__(self, additional_players):
+        self.deck = Deck()
+        self.stage = Stage.PREDEAL
+        self.players = []
+        self.community = []
+        
+        self.players.append(Player(is_user=True))
+        
+        for player in range(additional_players):
+            self.players.append(Player())
+            
+    def deal(self):
+        if self.stage == Stage.PREDEAL:
+            for round in range(2):
+                for player in self.players:
+                    card = self.deck.cards.pop()
+                    player.hand.append(card)
+                    
+            self.stage = Stage.PREFLOP
+        
+        elif self.stage == Stage.PREFLOP:
+            #burn a card
+            self.deck.cards.pop()
+            
+            flop = self.deck.cards[-3:]
+            self.community = flop
+            self.deck.cards = self.deck.cards[:-3]
+            
+            self.stage = self.stage + 1
+        
+        elif self.stage < Stage.RIVER:
+            self.deck.cards.pop()
+            
+            self.community.append(self.deck.cards.pop())
+            self.stage = self.stage + 1
+            
+class Player:
+    def __init__(self, is_user=False):
+        self.hand = []
+        self.is_user = is_user
+        
+class Deck:
+    def __init__(self):
+        suits = ['D', 'S', 'H', 'C']
+        numbers = [2,3,4,5,6,7,8,9,10,11,12,13,14]
+        self.cards = []
+        
+        for suit in suits:
+            for number in numbers:
+                card = Card(name=suit + str(number))
+                self.cards.append(card)
+        
+        shuffle(self.cards)
+        
+class Card:
+    def __init__(self, name):
+        self._name = name
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        if len(name) not in range(2,4):
+            raise Exception('Name must be two characters, got ' + name)
+        
+        if name[0] not in ['D','S','H','C']:
+            raise Exception('Name must start with D, S, H, or C, got ' + name)
+            
+        if len(name) == 3:
+            number = name[-2:]
+        else:
+            number = name[-1]
+            
+        if int(number) not in range(2,15):
+            raise Exception('Name must end with a number between 2-14, got ' + number)
+
+
+
+
+
+
+
+"""
 class PlayerManager(models.Manager):
     def create_player(self, name):
         player = self.create(name=name)
@@ -38,8 +133,6 @@ class Stack(models.Model):
     
     objects = StackManager()
     
-    """Need to change this to players in game"""
-    """Need to make Deck a subset of Stack"""
     def deal(self):
         counter = 1
         players = Player.objects.all()
@@ -53,11 +146,11 @@ class Stack(models.Model):
                 counter = counter + 1
                 
     
-    """General algorithm for current view
+    General algorithm for current view
     1) What is my best hand
     2) How many combinations of that hand are in a deck
     3) How many beating/tying combinations of that hand are in a deck
-    4) What is the probability of each other player selecting a losing hand"""
+    4) What is the probability of each other player selecting a losing hand
     
     def get_pocket_win_probability(self):
         cards = Card.objects.filter(stack=self)
@@ -144,3 +237,4 @@ class Card(models.Model):
     order = models.PositiveIntegerField()
     
     
+"""
