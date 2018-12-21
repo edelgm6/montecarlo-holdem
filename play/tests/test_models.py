@@ -1,5 +1,124 @@
 from django.test import TestCase
-from play.models import Game, Deck, Card, Stage
+from play.models import Game, Deck, Card, Stage, Suit
+
+class PlayerTestCase(TestCase):
+    def test_can_create_player(self):
+        game = Game()
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        player = game.players[0]
+        
+        hand = player.get_total_hand()
+        self.assertEqual(len(hand), 7)
+        
+    def test_is_flush_ids_a_flush(self):
+        game = Game()
+        
+        hand = []
+        for number in range(2, 8):
+            card = Card(name=Suit.DIAMOND.value + str(number))
+            hand.append(card)
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        
+        player = game.players[0]
+        
+        is_flush = player.is_flush(hand)
+
+        self.assertEqual(is_flush, 7)
+        
+    def test_is_flush_returns_false_if_no_flush(self):
+        game = Game()
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        
+        player = game.players[0]
+        
+        is_flush = player.is_flush(hand)
+
+        self.assertFalse(is_flush)
+    
+    def test_is_straight_returns_high_card(self):
+        game = Game()
+        
+        hand = []
+        for number in range(2, 8):
+            card = Card(name=Suit.DIAMOND.value + str(number))
+            hand.append(card)
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        
+        player = game.players[0]
+        
+        is_straight = player.is_straight(hand)
+        
+        self.assertEqual(is_straight, 7)
+        
+    def test_isnt_straight_returns_false(self):
+        game = Game()
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        hand.append(Card(name='D5'))
+        hand.append(Card(name='S4'))
+        hand.append(Card(name='D3'))
+        hand.append(Card(name='S10'))
+        hand.append(Card(name='D14'))
+        
+        player = game.players[0]
+        
+        is_straight = player.is_straight(hand)
+        
+        self.assertFalse(is_straight)
+        
+    def test_is_four_of_a_kind_returns_number(self):
+        game = Game()
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='D2'))
+        hand.append(Card(name='S2'))
+        hand.append(Card(name='H2'))
+        hand.append(Card(name='D3'))
+        hand.append(Card(name='S10'))
+        hand.append(Card(name='D14'))
+        
+        player = game.players[0]
+        
+        is_four_of_a_kind = player.is_four_of_a_kind(hand)
+        
+        self.assertEqual(is_four_of_a_kind, 2)
+        
+    def test_isnt_four_of_a_kind_returns_false(self):
+        game = Game()
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='D6'))
+        hand.append(Card(name='S2'))
+        hand.append(Card(name='H2'))
+        hand.append(Card(name='D3'))
+        hand.append(Card(name='S10'))
+        hand.append(Card(name='D14'))
+        
+        player = game.players[0]
+        
+        is_four_of_a_kind = player.is_four_of_a_kind(hand)
+        
+        self.assertFalse(is_four_of_a_kind)
+        
 
 class CardTestCase(TestCase):
     def test_can_create_card(self):
