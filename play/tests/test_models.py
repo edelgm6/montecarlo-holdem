@@ -39,6 +39,13 @@ class StackTestCase(TestCase):
         woodhaven_hand = Card.objects.filter(stack__player=woodhaven)
         self.assertEqual(woodhaven_hand.count(), 2)
         
+    def test_pocket_win_probability_returns_correct_amount(self):
+        hand = Stack.objects.create()
+        five_clubs = Card.objects.create(suit=Card.CLUBS, number=Card.FIVE, stack=hand, order=1)
+        five_hearts = Card.objects.create(suit=Card.HEARTS, number=Card.FIVE, stack=hand, order=2)
+        
+        hand.get_pocket_win_probability()
+        
         
 class PlayerTestCase(TestCase):
     

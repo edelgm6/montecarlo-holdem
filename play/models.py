@@ -51,6 +51,47 @@ class Stack(models.Model):
                 card.save()
                 
                 counter = counter + 1
+                
+    
+    """General algorithm for current view
+    1) What is my best hand
+    2) How many combinations of that hand are in a deck
+    3) How many beating/tying combinations of that hand are in a deck
+    4) What is the probability of each other player selecting a losing hand"""
+    
+    def get_pocket_win_probability(self):
+        cards = Card.objects.filter(stack=self)
+        #other_players_count = Player.objects.all().count() - 1
+        other_players_count = 3
+        
+        numbers = []
+        for card in cards:
+            numbers.append(card.number)
+            
+        is_pair = False
+        if numbers[0] == numbers[1]:
+            is_pair = True
+        
+        if is_pair:
+            pair_value = numbers[0]
+            
+            POCKET_COMBINATIONS = 52*51 / 2
+            PAIR_COMBINATIONS = 52*3 / 2
+            
+            BEATING_PAIR_COMBINATIONS = (14 - pair_value) / 13 * PAIR_COMBINATIONS
+            TYING_PAIR_COMBINATIONS = 1
+            
+            LOSING_POCKET_COMBINATIONS = POCKET_COMBINATIONS - 1 - (BEATING_PAIR_COMBINATIONS + TYING_PAIR_COMBINATIONS)
+            
+            #probability_win = LOSING_POCKET_COMBINATIONS / (POCKET_COMBINATIONS - 1)
+            probability_win = 1
+            for count in range(0, other_players_count):
+                probability = (LOSING_POCKET_COMBINATIONS - count) / (POCKET_COMBINATIONS - 1 - count)
+                probability_win = probability_win * probability
+                
+            print(probability_win)
+            
+            
                
 
 class Card(models.Model):
