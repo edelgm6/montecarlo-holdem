@@ -72,6 +72,12 @@ class Player:
         chars = len(card.name)
         return int(card.name[-(chars - 1):])
     
+    def get_stripped_hand(self, hand, card_number_to_remove):
+        hand_without_cards = [card for card in hand if self.get_number(card) != card_number_to_remove]
+        
+        return hand_without_cards
+        
+    
     def is_flush(self, hand):
         suits = []
         for card in hand:
@@ -116,8 +122,65 @@ class Player:
                 return number
             
         return False
-        
+    
+    def is_three_of_a_kind(self, hand):
+        numbers = []
+        for card in hand:
+            numbers.append(self.get_number(card))
             
+        numbers.sort(reverse=True)
+        
+        for number in numbers[:5]:
+            if numbers.count(number) == 3:
+                return number
+            
+        return False
+    
+    def is_pair(self, hand):
+        numbers = []
+        for card in hand:
+            numbers.append(self.get_number(card))
+            
+        numbers.sort(reverse=True)
+        
+        for number in numbers[:6]:
+            if numbers.count(number) == 2:
+                return number
+            
+        return False
+    
+    def is_two_pair(self, hand):
+        high_pair_value = self.is_pair(hand)
+        
+        if high_pair_value:
+            hand_without_pair = self.get_stripped_hand(hand, high_pair_value)
+            low_pair_value = self.is_pair(hand_without_pair)
+            
+            if low_pair_value:
+                return (high_pair_value, low_pair_value)
+            
+        return False
+    
+    def is_full_house(self, hand):
+        three_of_a_kind_value = self.is_three_of_a_kind(hand)
+        
+        if three_of_a_kind_value:
+            hand_without_three_cards = self.get_stripped_hand(hand, three_of_a_kind_value)
+            
+            two_of_a_kind_value = self.is_pair(hand_without_three_cards)
+            if two_of_a_kind_value:
+                return (three_of_a_kind_value, two_of_a_kind_value)
+            
+        return False
+    
+    def get_high_card(self, hand):
+        numbers = []
+        for card in hand:
+            numbers.append(self.get_number(card))
+            
+        numbers.sort()
+        
+        return numbers.pop()
         
         
         
