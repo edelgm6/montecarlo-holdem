@@ -1,8 +1,51 @@
 from django.test import TestCase
-from play.models import Game, Deck, Card, Stage, Suit
+from play.models import Game, Deck, Card, Stage, Suit, Hand
 from play.handsorter import HandSorter
 
 class HandSorterTestCase(TestCase):
+    
+    def test_returns_best_hand(self):
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='D2'))
+        hand.append(Card(name='S2'))
+        hand.append(Card(name='D3'))
+        hand.append(Card(name='S3'))
+        hand.append(Card(name='D3'))
+        
+        hand = HandSorter.get_best_hand(hand)
+        
+        self.assertEqual(hand, (Hand.FOUR_OF_A_KIND, 2))
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        hand.append(Card(name='C4'))
+        hand.append(Card(name='C5'))
+        hand.append(Card(name='C6'))
+        hand.append(Card(name='S3'))
+        hand.append(Card(name='D3'))
+        
+        hand = HandSorter.get_best_hand(hand)
+        
+        self.assertEqual(hand, (Hand.STRAIGHT_FLUSH, 6))
+        
+        hand = []
+            
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C2'))
+        hand.append(Card(name='C3'))
+        hand.append(Card(name='C3'))
+        hand.append(Card(name='C7'))
+        hand.append(Card(name='S7'))
+        hand.append(Card(name='D7'))
+        
+        hand = HandSorter.get_best_hand(hand)
+        
+        self.assertEqual(hand, (Hand.FULL_HOUSE, (7, 3)))
     
     def test_is_flush_ids_a_flush(self):
         hand = []

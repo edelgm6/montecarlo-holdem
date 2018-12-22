@@ -1,8 +1,6 @@
-from play.models import Stage, Suit
+from play.models import Stage, Suit, Hand
 
 class HandSorter:
-    #def __init__(self, hand):
-    #    self.hand = []
     @staticmethod
     def get_suit(card):
         return card.name[0]
@@ -12,11 +10,13 @@ class HandSorter:
         chars = len(card.name)
         return int(card.name[-(chars - 1):])
     
+    @staticmethod
     def get_stripped_hand(hand, card_number_to_remove):
         hand_without_cards = [card for card in hand if HandSorter.get_number(card) != card_number_to_remove]
         
         return hand_without_cards
     
+    @staticmethod
     def get_hand_numbers(hand):
         numbers = []
         for card in hand:
@@ -24,6 +24,43 @@ class HandSorter:
             
         return numbers
     
+    def get_best_hand(hand):
+        is_hand = HandSorter.is_straight_flush(hand)
+        if is_hand:
+            return (Hand.STRAIGHT_FLUSH, is_hand)
+        
+        is_hand = HandSorter.is_four_of_a_kind(hand)
+        if is_hand:
+            return (Hand.FOUR_OF_A_KIND, is_hand)
+        
+        is_hand = HandSorter.is_full_house(hand)
+        if is_hand:
+            return (Hand.FULL_HOUSE, is_hand)
+        
+        is_hand = HandSorter.is_flush(hand)
+        if is_hand:
+            return (Hand.FLUSH, is_hand)
+        
+        is_hand = HandSorter.is_straight(hand)
+        if is_hand:
+            return (Hand.STRAIGHT, is_hand)
+        
+        is_hand = HandSorter.is_three_of_a_kind(hand)
+        if is_hand:
+            return (Hand.THREE_OF_A_KIND, is_hand)
+        
+        is_hand = HandSorter.is_two_pair(hand)
+        if is_hand:
+            return (Hand.TWO_PAIR, is_hand)
+        
+        is_hand = HandSorter.is_pair(hand)
+        if is_hand:
+            return (Hand.PAIR, is_hand)
+        
+        high_card = HandSorter.get_high_card(hand)
+        return (Hand.HIGH_CARD, high_card)
+    
+    @staticmethod
     def is_straight_flush(hand):
         is_flush = HandSorter.is_flush(hand)
         is_straight = HandSorter.is_straight(hand)
@@ -53,6 +90,7 @@ class HandSorter:
         
         return False
     
+    @staticmethod
     def is_straight(hand):
         numbers = HandSorter.get_hand_numbers(hand)
         
@@ -66,6 +104,7 @@ class HandSorter:
         
         return False
     
+    @staticmethod
     def is_four_of_a_kind(hand):
         numbers = HandSorter.get_hand_numbers(hand)
             
@@ -75,6 +114,7 @@ class HandSorter:
             
         return False
     
+    @staticmethod
     def is_three_of_a_kind(hand):
         numbers = HandSorter.get_hand_numbers(hand)
             
@@ -86,6 +126,7 @@ class HandSorter:
             
         return False
     
+    @staticmethod
     def is_pair(hand):
         numbers = HandSorter.get_hand_numbers(hand)
             
@@ -97,6 +138,7 @@ class HandSorter:
             
         return False
     
+    @staticmethod
     def is_two_pair(hand):
         high_pair_value = HandSorter.is_pair(hand)
         
@@ -109,6 +151,7 @@ class HandSorter:
             
         return False
     
+    @staticmethod
     def is_full_house(hand):
         three_of_a_kind_value = HandSorter.is_three_of_a_kind(hand)
         
@@ -121,6 +164,7 @@ class HandSorter:
             
         return False
     
+    @staticmethod
     def get_high_card(hand):
         numbers = HandSorter.get_hand_numbers(hand)
             
