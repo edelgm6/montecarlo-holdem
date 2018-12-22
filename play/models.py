@@ -76,7 +76,14 @@ class Player:
         hand_without_cards = [card for card in hand if self.get_number(card) != card_number_to_remove]
         
         return hand_without_cards
-        
+    
+    def get_hand_numbers(self, hand):
+        numbers = []
+        for card in hand:
+            numbers.append(self.get_number(card))
+            
+        return numbers
+    
     
     def is_flush(self, hand):
         suits = []
@@ -98,9 +105,7 @@ class Player:
         return False
     
     def is_straight(self, hand):
-        numbers = []
-        for card in hand:
-            numbers.append(self.get_number(card))
+        numbers = self.get_hand_numbers(hand)
         
         numbers.sort(reverse=True)
         for number in numbers[:3]:
@@ -113,9 +118,7 @@ class Player:
         return False
     
     def is_four_of_a_kind(self, hand):
-        numbers = []
-        for card in hand:
-            numbers.append(self.get_number(card))
+        numbers = self.get_hand_numbers(hand)
             
         for number in numbers[:4]:
             if numbers.count(number) == 4:
@@ -124,9 +127,7 @@ class Player:
         return False
     
     def is_three_of_a_kind(self, hand):
-        numbers = []
-        for card in hand:
-            numbers.append(self.get_number(card))
+        numbers = self.get_hand_numbers(hand)
             
         numbers.sort(reverse=True)
         
@@ -137,9 +138,7 @@ class Player:
         return False
     
     def is_pair(self, hand):
-        numbers = []
-        for card in hand:
-            numbers.append(self.get_number(card))
+        numbers = self.get_hand_numbers(hand)
             
         numbers.sort(reverse=True)
         
@@ -174,9 +173,7 @@ class Player:
         return False
     
     def get_high_card(self, hand):
-        numbers = []
-        for card in hand:
-            numbers.append(self.get_number(card))
+        numbers = self.get_hand_numbers(hand)
             
         numbers.sort()
         
