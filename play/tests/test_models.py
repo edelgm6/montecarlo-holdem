@@ -11,8 +11,26 @@ class PlayerTestCase(TestCase):
         
         player = game.players[0]
         
-        hand = player.get_total_hand()
-        self.assertEqual(len(hand), 7)
+        self.assertEqual(len(player.hand), 2)
+        
+    def test_set_player_best_hands(self):
+        game = Game()
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        game.set_player_hands()
+        player = game.players[0]
+        
+    def test_get_winning_player(self):
+        game = Game()
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        game.get_winning_player()
 
 class CardTestCase(TestCase):
     def test_can_create_card(self):

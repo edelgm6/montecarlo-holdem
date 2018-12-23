@@ -1,31 +1,8 @@
 from django.db import models
+from play.handsorter import HandSorter
+from play.rules import Suit, Hand, Stage
 from random import shuffle
-from enum import Enum
-import weakref
-
-class Stage(Enum):
-    PREDEAL = 0
-    PREFLOP = 1
-    FLOP = 2
-    TURN = 3
-    RIVER = 4
-    
-class Suit(Enum):
-    HEART = 'H'
-    SPADE = 'S'
-    CLUB = 'C'
-    DIAMOND = 'D'
-    
-class Hand(Enum):
-    STRAIGHT_FLUSH = 1
-    FOUR_OF_A_KIND = 2
-    FULL_HOUSE = 3
-    FLUSH = 4
-    STRAIGHT = 5
-    THREE_OF_A_KIND = 6
-    TWO_PAIR = 7
-    PAIR = 8
-    HIGH_CARD = 9
+from operator import itemgetter
 
 class Game:
     def __init__(self, additional_players=1):
@@ -64,16 +41,35 @@ class Game:
             self.community.append(self.deck.cards.pop())
             self.stage = Stage(self.stage.value + 1)
             
+    def set_player_hands(self):
+        for player in self.players:
+            player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
+            
+    def get_winning_player(self):
+        self.set_player_hands()
+        
+        hands = []
+        for player in self.players:
+            hands.append({'player': player, 'hand': player.best_hand})
+        
+        top_player = hands[0]
+        for hand in hands[1:]:
+            if hand['hand'][0].value == top_player['hand'][0].value:
+                if hand['hand'][1] > top_player['hand'][1]:
+                    top_player = hand
+            
+            
+            
 class Player:
     def __init__(self, game, is_user=False):
         self.hand = []
         self.is_user = is_user
-        self.game = game
+        #self.game = game
     
-    def get_total_hand(self):
-        total_hand = []
+    #def get_total_hand(self):
+    #    total_hand = []
         
-        return self.hand + self.game.community
+    #    return self.hand + self.game.community
         
         
 class Deck:

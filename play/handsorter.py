@@ -1,4 +1,4 @@
-from play.models import Stage, Suit, Hand
+from play.rules import Stage, Suit, Hand
 
 class HandSorter:
     @staticmethod
