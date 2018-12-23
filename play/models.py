@@ -45,18 +45,20 @@ class Game:
         for player in self.players:
             player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
             
+    
+    """
+    TODO:
+    1. Make set hands method set the name of the hand and the cards themselves
+    2. Compare each player's hand to see which one wins
+    3. If there is a tie, pass each player's cards to a tie-breaker method
+    
     def get_winning_player(self):
         self.set_player_hands()
         
-        hands = []
-        for player in self.players:
-            hands.append({'player': player, 'hand': player.best_hand})
-        
-        top_player = hands[0]
-        for hand in hands[1:]:
-            if hand['hand'][0].value == top_player['hand'][0].value:
-                if hand['hand'][1] > top_player['hand'][1]:
-                    top_player = hand
+        top_hands = [self.players[0].best_hand]
+        top_hand = self.players.best_hand
+        for player in self.players[1::
+    """        
             
             
             
@@ -75,37 +77,36 @@ class Player:
 class Deck:
     def __init__(self):
         #suits = [Suit.DIAMOND, Suit.SPADE, Suit.HEART, Suit.CLUB]
-        suits = [s.value for s in Suit]
+        suits = [s for s in Suit]
         numbers = [2,3,4,5,6,7,8,9,10,11,12,13,14]
         self.cards = []
         
         for suit in suits:
             for number in numbers:
-                card = Card(name=suit + str(number))
+                card = Card(suit=suit, number=number)
                 self.cards.append(card)
         
         shuffle(self.cards)
         
 class Card:
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, suit, number):
+        self._suit = suit
+        self._number = number
     
     @property
-    def name(self):
-        return self._name
+    def suit(self):
+        return self._suit
     
-    @name.setter
-    def name(self, name):
-        if len(name) not in range(2,4):
-            raise Exception('Name must be two characters, got ' + name)
-        
-        if name[0] not in [Suit.DIAMOND, Suit.SPADE, Suit.HEART, Suit.CLUB]:
-            raise Exception('Name must start with D, S, H, or C, got ' + name)
-            
-        if len(name) == 3:
-            number = name[-2:]
-        else:
-            number = name[-1]
-            
-        if int(number) not in range(2,15):
-            raise Exception('Name must end with a number between 2-14, got ' + number)
+    @suit.setter
+    def suit(self, suit):
+        if suit not in [suit for suit in Suit]:
+            raise Exception('Suit must be value in Suit enum')
+                                   
+    @property
+    def number(self):
+        return self._number
+
+    @number.setter
+    def number(self, number):
+        if number not in range(2,15):
+            raise Exception('Number must be between 2-14, got ' + number)

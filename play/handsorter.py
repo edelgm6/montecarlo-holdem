@@ -1,18 +1,20 @@
 from play.rules import Stage, Suit, Hand
 
 class HandSorter:
+    """
     @staticmethod
     def get_suit(card):
-        return card.name[0]
+        return card.suit[0]
     
     @staticmethod
     def get_number(card):
         chars = len(card.name)
         return int(card.name[-(chars - 1):])
+    """
     
     @staticmethod
     def get_stripped_hand(hand, card_number_to_remove):
-        hand_without_cards = [card for card in hand if HandSorter.get_number(card) != card_number_to_remove]
+        hand_without_cards = [card for card in hand if card.number != card_number_to_remove]
         
         return hand_without_cards
     
@@ -20,7 +22,7 @@ class HandSorter:
     def get_hand_numbers(hand):
         numbers = []
         for card in hand:
-            numbers.append(HandSorter.get_number(card))
+            numbers.append(card.number)
             
         return numbers
     
@@ -74,15 +76,15 @@ class HandSorter:
     def is_flush(hand):
         suits = []
         for card in hand:
-            suits.append(HandSorter.get_suit(card))
+            suits.append(card.suit)
             
-        for suit in [s.value for s in Suit]:
+        for suit in [s for s in Suit]:
             if suits.count(suit) >= 5:
-                high_card = 0
                 
+                high_card = 0
                 for card in hand:
-                    if HandSorter.get_suit(card) == suit:
-                        number = HandSorter.get_number(card)
+                    if card.suit == suit:
+                        number = card.number
                         if number > high_card:
                             high_card = number
                 
