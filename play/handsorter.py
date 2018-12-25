@@ -1,16 +1,6 @@
 from play.rules import Stage, Suit, Hand
 
 class HandSorter:
-    """
-    @staticmethod
-    def get_suit(card):
-        return card.suit[0]
-    
-    @staticmethod
-    def get_number(card):
-        chars = len(card.name)
-        return int(card.name[-(chars - 1):])
-    """
     
     @staticmethod
     def get_stripped_hand(hand, card_number_to_remove):
@@ -25,6 +15,24 @@ class HandSorter:
             numbers.append(card.number)
             
         return numbers
+    
+    @staticmethod
+    def sort_cards(hand):
+        n = len(hand) 
+  
+        # Traverse through all array elements 
+        for i in range(n): 
+
+            # Last i elements are already in place 
+            for j in range(0, n-i-1): 
+
+                # traverse the array from 0 to n-i-1 
+                # Swap if the element found is greater 
+                # than the next element 
+                if hand[j].number < hand[j+1].number : 
+                    hand[j], hand[j+1] = hand[j+1], hand[j]
+        
+        return hand
     
     def get_best_hand(hand):
         is_hand = HandSorter.is_straight_flush(hand)
@@ -62,13 +70,43 @@ class HandSorter:
         high_card = HandSorter.get_high_card(hand)
         return (Hand.HIGH_CARD, high_card)
     
+    """
+    TODO:
+    This is wrong -- needs to make sure the same set of 
+    5 cards is ID'd for both methods
+    
+    Plus the ID'd straight might not be the straight flush,
+    so have to check if there are *any* straight flushes, not
+    just the flush or straight that id ID'd
+    """
+    
+    """
+    TODO
+    Test all methods for robustness of getting fewer than 7 cards/fewer than 5 cards"""
     @staticmethod
     def is_straight_flush(hand):
         is_flush = HandSorter.is_flush(hand)
-        is_straight = HandSorter.is_straight(hand)
+        if not is_flush:
+            return False
         
-        if (is_flush and is_straight):
-            return is_straight
+        flush_suit = is_flush['hand'][0].suit
+        
+        single_suit_cards = []
+        for card in hand:
+            if card.suit == flush_suit:
+                single_suit_cards.append(card)
+                
+        ordered_hand = HandSorter.sort_cards(single_suit_cards)
+        test_hands = []
+        for i in range(0,len(ordered_hand) - 4):
+            test_hands.append(ordered_hand[i:i+5])
+        
+        for hand in test_hands:
+
+            is_straight = HandSorter.is_straight(hand)
+        
+            if is_straight:
+                return {'score': Hand.STRAIGHT_FLUSH, 'hand': hand}
         
         return False
     
@@ -80,31 +118,46 @@ class HandSorter:
             
         for suit in [s for s in Suit]:
             if suits.count(suit) >= 5:
+                flush_suit = suit
                 
-                high_card = 0
+                flush_hand = []
                 for card in hand:
-                    if card.suit == suit:
-                        number = card.number
-                        if number > high_card:
-                            high_card = number
-                
-                return high_card
+                    if card.suit == flush_suit:
+                        flush_hand.append(card)
+                        
+                ordered_flush_hand = HandSorter.sort_cards(flush_hand)
+                return {'score': Hand.FLUSH, 'hand': ordered_flush_hand[:5]}
         
         return False
     
     @staticmethod
     def is_straight(hand):
         numbers = HandSorter.get_hand_numbers(hand)
+        ordered_hand = HandSorter.sort_cards(hand)
         
-        numbers.sort(reverse=True)
-        for number in numbers[:3]:
-            if (number - 1 in numbers
-                and number - 2 in numbers
-                and number - 3 in numbers
-                and number - 4 in numbers):
-                    return number
-        
-        return False
+        high_straight_card = False
+        for card in ordered_hand[:3]:
+            if (card.number - 1 in numbers
+                and card.number - 2 in numbers
+                and card.number - 3 in numbers
+                and card.number - 4 in numbers):
+                    high_straight_card = card
+                    break
+            else:
+                return False
+            
+        cards_to_eval = ordered_hand[ordered_hand.index(high_straight_card):]
+        straight_hand = [cards_to_eval[0]]
+        for card in cards_to_eval[1:]:
+            hand_length = len(straight_hand)
+            if hand_length == 5:
+                break
+            
+            if card.number < straight_hand[hand_length - 1].number:
+                straight_hand.append(card)
+                
+        return {'score': Hand.STRAIGHT, 'hand': straight_hand}
+            
     
     @staticmethod
     def is_four_of_a_kind(hand):

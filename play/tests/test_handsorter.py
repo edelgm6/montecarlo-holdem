@@ -4,6 +4,27 @@ from play.handsorter import HandSorter
 
 class HandSorterTestCase(TestCase):
     
+    """
+    TODO
+    Test that the corect Hand enum is returned in each test
+    """
+    
+    def test_sort_cards_sorts_high_to_low(self):
+        hand = []
+            
+        hand.append(Card(suit=Suit.CLUB, number = 2))
+        hand.append(Card(suit=Suit.CLUB, number = 14))
+        hand.append(Card(suit=Suit.DIAMOND, number = 5))
+        hand.append(Card(suit=Suit.SPADE, number = 3))
+        hand.append(Card(suit=Suit.DIAMOND, number = 11))
+        hand.append(Card(suit=Suit.SPADE, number = 10))
+        hand.append(Card(suit=Suit.DIAMOND, number = 11)) 
+            
+        ordered_hand = HandSorter.sort_cards(hand)
+        
+        self.assertEqual(ordered_hand[0].number, 14)
+        self.assertEqual(ordered_hand[6].number, 2)
+    
     def test_returns_best_hand(self):
         hand = []
             
@@ -58,7 +79,10 @@ class HandSorterTestCase(TestCase):
         
         is_flush = HandSorter.is_flush(hand)
 
-        self.assertEqual(is_flush, 7)
+        self.assertEqual(is_flush['score'], Hand.FLUSH)
+        self.assertEqual(is_flush['hand'][0].number, 7)
+        self.assertEqual(is_flush['hand'][4].number, 3)
+        self.assertEqual(len(is_flush['hand']), 5)
         
     def test_is_flush_returns_false_if_no_flush(self):
         hand = []
@@ -70,18 +94,24 @@ class HandSorterTestCase(TestCase):
 
         self.assertFalse(is_flush)
     
-    def test_is_straight_returns_high_card(self):
+    def test_is_straight_returns_straight_hand(self):
         hand = []
-        for number in range(2, 8):
+        for number in range(2, 7):
             card = Card(suit=Suit.DIAMOND, number=number)
             hand.append(card)
             
-        hand.append(Card(suit=Suit.CLUB, number=2))
-        hand.append(Card(suit=Suit.CLUB, number=3))
+        hand.append(Card(suit=Suit.CLUB, number=6))
+        hand.append(Card(suit=Suit.CLUB, number=5))
         
         is_straight = HandSorter.is_straight(hand)
         
-        self.assertEqual(is_straight, 7)
+        self.assertEqual(len(is_straight['hand']), 5)
+        returned_hand = is_straight['hand']
+        self.assertEqual(returned_hand[0].number, 6)
+        self.assertEqual(returned_hand[4].number, 2)
+        self.assertEqual(returned_hand[3].number, 3)
+        self.assertEqual(returned_hand[2].number, 4)
+        self.assertEqual(returned_hand[1].number, 5)
         
     def test_isnt_straight_returns_false(self):
         hand = []
@@ -255,17 +285,24 @@ class HandSorterTestCase(TestCase):
     def test_is_straight_flush_returns_high_card(self):
         hand = []
             
-        hand.append(Card(suit=Suit.CLUB, number=2))
         hand.append(Card(suit=Suit.CLUB, number=3))
         hand.append(Card(suit=Suit.CLUB, number=4))
         hand.append(Card(suit=Suit.CLUB, number=5))
         hand.append(Card(suit=Suit.CLUB, number=6))
-        hand.append(Card(suit=Suit.SPADE, number=10))
-        hand.append(Card(suit=Suit.DIAMOND, number=11)) 
+        hand.append(Card(suit=Suit.CLUB, number=7))
+        hand.append(Card(suit=Suit.CLUB, number=8))
+        hand.append(Card(suit=Suit.CLUB, number=10))
         
         is_straight_flush = HandSorter.is_straight_flush(hand)
         
-        self.assertEqual(is_straight_flush, 6) 
+        hand = is_straight_flush['hand']
+        self.assertEqual(len(hand), 5)
+        self.assertEqual(hand[0].number, 8)
+        self.assertEqual(hand[1].number, 7)
+        self.assertEqual(hand[2].number, 6)
+        self.assertEqual(hand[3].number, 5)
+        self.assertEqual(hand[4].number, 4)
+        self.assertEqual(is_straight_flush['score'], Hand.STRAIGHT_FLUSH)
         
     def test_isnt_straight_flush_returns_false(self):
         hand = []
