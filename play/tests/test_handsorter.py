@@ -38,7 +38,7 @@ class HandSorterTestCase(TestCase):
         
         hand = HandSorter.get_best_hand(hand)
         
-        self.assertEqual(hand, (Hand.FOUR_OF_A_KIND, 2))
+        self.assertEqual(hand['score'], Hand.FOUR_OF_A_KIND)
         
         hand = []
             
@@ -66,7 +66,7 @@ class HandSorterTestCase(TestCase):
         
         hand = HandSorter.get_best_hand(hand)
         
-        self.assertEqual(hand, (Hand.FULL_HOUSE, (7, 3)))
+        self.assertEqual(hand['score'], Hand.FULL_HOUSE)
     
     def test_is_flush_ids_a_flush(self):
         hand = []
@@ -241,7 +241,7 @@ class HandSorterTestCase(TestCase):
         
         self.assertFalse(is_pair) 
         
-    def test_is_full_house_returns_tuple(self):        
+    def test_is_full_house_returns_three_and_pair(self):        
         hand = []
             
         hand.append(Card(suit=Suit.CLUB, number=2))
@@ -254,9 +254,14 @@ class HandSorterTestCase(TestCase):
         
         is_full_house = HandSorter.is_full_house(hand)
         
-        self.assertEqual(is_full_house, (3,6))
+        self.assertEqual(is_full_house['score'], Hand.FULL_HOUSE)
+        self.assertEqual(is_full_house['hand'][0][0].number, 3)
+        self.assertEqual(is_full_house['hand'][0][1].number, 3)
+        self.assertEqual(is_full_house['hand'][0][2].number, 3)
+        self.assertEqual(is_full_house['hand'][1][0].number, 6)
+        self.assertEqual(is_full_house['hand'][1][1].number, 6)
         
-    def test_is_two_pair_returns_tuple(self):
+    def test_is_two_pair_returns_two_pairs_and_kicker(self):
         hand = []
             
         hand.append(Card(suit=Suit.CLUB, number=2))
@@ -269,7 +274,12 @@ class HandSorterTestCase(TestCase):
         
         is_two_pair = HandSorter.is_two_pair(hand)
         
-        self.assertEqual(is_two_pair, (9,3))
+        self.assertEqual(is_two_pair['score'], Hand.TWO_PAIR)
+        self.assertEqual(is_two_pair['hand'][0][0].number, 9)
+        self.assertEqual(is_two_pair['hand'][0][1].number, 9)
+        self.assertEqual(is_two_pair['hand'][1][0].number, 3)
+        self.assertEqual(is_two_pair['hand'][1][1].number, 3)
+        self.assertEqual(is_two_pair['hand'][2].number, 7)
         
     def test_isnt_two_pair_returns_false(self):
         hand = []
@@ -286,7 +296,7 @@ class HandSorterTestCase(TestCase):
         
         self.assertFalse(is_two_pair)
         
-    def test_get_high_card_returns_highest(self):        
+    def test_get_high_card_returns_ordered_cards(self):        
         hand = []
             
             
@@ -295,12 +305,19 @@ class HandSorterTestCase(TestCase):
         hand.append(Card(suit=Suit.SPADE, number=3))
         hand.append(Card(suit=Suit.HEART, number=4))
         hand.append(Card(suit=Suit.DIAMOND, number=7))
-        hand.append(Card(suit=Suit.SPADE, number=10))
+        hand.append(Card(suit=Suit.SPADE, number=11))
         hand.append(Card(suit=Suit.DIAMOND, number=11)) 
         
         high_card = HandSorter.get_high_card(hand)
         
-        self.assertEqual(high_card, 13)
+        hand = high_card['hand']
+        self.assertEqual(len(hand), 5)
+        self.assertEqual(hand[0].number, 13)
+        self.assertEqual(hand[1].number, 11)
+        self.assertEqual(hand[2].number, 11)
+        self.assertEqual(hand[3].number, 7)
+        self.assertEqual(hand[4].number, 4)
+        self.assertEqual(high_card['score'], Hand.HIGH_CARD)
         
     def test_is_straight_flush_returns_high_card(self):
         hand = []

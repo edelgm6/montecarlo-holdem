@@ -38,38 +38,38 @@ class HandSorter:
     def get_best_hand(hand):
         is_hand = HandSorter.is_straight_flush(hand)
         if is_hand:
-            return (Hand.STRAIGHT_FLUSH, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_four_of_a_kind(hand)
         if is_hand:
-            return (Hand.FOUR_OF_A_KIND, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_full_house(hand)
         if is_hand:
-            return (Hand.FULL_HOUSE, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_flush(hand)
         if is_hand:
-            return (Hand.FLUSH, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_straight(hand)
         if is_hand:
-            return (Hand.STRAIGHT, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_three_of_a_kind(hand)
         if is_hand:
-            return (Hand.THREE_OF_A_KIND, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_two_pair(hand)
         if is_hand:
-            return (Hand.TWO_PAIR, is_hand)
+            return is_hand
         
         is_hand = HandSorter.is_pair(hand)
         if is_hand:
-            return (Hand.PAIR, is_hand)
+            return is_hand
         
         high_card = HandSorter.get_high_card(hand)
-        return (Hand.HIGH_CARD, high_card)
+        return high_card
     
     """
     TODO
@@ -202,6 +202,7 @@ class HandSorter:
         numbers = HandSorter.get_hand_numbers(hand)
         numbers.sort(reverse=True)
         
+        pair_number = False
         for number in numbers[:6]:
             if numbers.count(number) == 2:
                 pair_number = number
@@ -217,41 +218,59 @@ class HandSorter:
         sorted_hand = HandSorter.sort_cards(hand_without_cards)
         
         pair.append(sorted_hand[0])
-        pair.append(sorted_hand[1])
-        pair.append(sorted_hand[2])
+        
+        try:
+            pair.append(sorted_hand[1])
+            pair.append(sorted_hand[2])
+        except IndexError:
+            pass
             
         return {'score': Hand.PAIR, 'hand': pair}
     
+    
+    """
+    TODO
+    Refactor to call some method that grabs the high pair from a deck
+    and returns that high pair?
+    """
     @staticmethod
     def is_two_pair(hand):
-        high_pair_value = HandSorter.is_pair(hand)
+        high_pair_hand = HandSorter.is_pair(hand)
         
-        if high_pair_value:
-            hand_without_pair = HandSorter.get_stripped_hand(hand, high_pair_value)
-            low_pair_value = HandSorter.is_pair(hand_without_pair)
+        if high_pair_hand:
+            hand_without_pair, high_pair = HandSorter.get_split_hands(hand, high_pair_hand['hand'][0].number)
+            low_pair_hand = HandSorter.is_pair(hand_without_pair)
             
-            if low_pair_value:
-                return (high_pair_value, low_pair_value)
+            low_pair = False
+            if not low_pair_hand:
+                return False
+            else:
+                remaining_hand, low_pair = HandSorter.get_split_hands(low_pair_hand['hand'], low_pair_hand['hand'][0].number)
+                
+            sorted_hand = HandSorter.sort_cards(remaining_hand)
             
+            two_pair = [high_pair, low_pair, sorted_hand[0]]
+            
+            return {'score': Hand.TWO_PAIR, 'hand': two_pair}
+                 
         return False
     
     @staticmethod
     def is_full_house(hand):
-        three_of_a_kind_value = HandSorter.is_three_of_a_kind(hand)
+        three_of_a_kind_hand = HandSorter.is_three_of_a_kind(hand)
         
-        if three_of_a_kind_value:
-            hand_without_three_cards = HandSorter.get_stripped_hand(hand, three_of_a_kind_value)
+        if three_of_a_kind_hand:
+            hand_without_three_cards, three_of_a_kind = HandSorter.get_split_hands(hand, three_of_a_kind_hand['hand'][0].number)
             
-            two_of_a_kind_value = HandSorter.is_pair(hand_without_three_cards)
-            if two_of_a_kind_value:
-                return (three_of_a_kind_value, two_of_a_kind_value)
+            two_of_a_kind_hand = HandSorter.is_pair(hand_without_three_cards)
+            if two_of_a_kind_hand:
+                hand_without_pair_cards, pair = HandSorter.get_split_hands(two_of_a_kind_hand['hand'], two_of_a_kind_hand['hand'][0].number)
+                return {'score': Hand.FULL_HOUSE, 'hand': [three_of_a_kind, pair]}
             
         return False
     
     @staticmethod
     def get_high_card(hand):
-        numbers = HandSorter.get_hand_numbers(hand)
-            
-        numbers.sort()
+        sorted_hand = HandSorter.sort_cards(hand)
         
-        return numbers.pop()
+        return {'score': Hand.HIGH_CARD, 'hand': sorted_hand[:5]}
