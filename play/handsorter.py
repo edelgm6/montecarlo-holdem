@@ -3,10 +3,11 @@ from play.rules import Stage, Suit, Hand
 class HandSorter:
     
     @staticmethod
-    def get_stripped_hand(hand, card_number_to_remove):
-        hand_without_cards = [card for card in hand if card.number != card_number_to_remove]
+    def get_split_hands(hand, card_number):
+        hand_without_cards = [card for card in hand if card.number != card_number]
+        hand_with_cards = [card for card in hand if card.number == card_number]
         
-        return hand_without_cards
+        return hand_without_cards, hand_with_cards
     
     @staticmethod
     def get_hand_numbers(hand):
@@ -69,16 +70,6 @@ class HandSorter:
         
         high_card = HandSorter.get_high_card(hand)
         return (Hand.HIGH_CARD, high_card)
-    
-    """
-    TODO:
-    This is wrong -- needs to make sure the same set of 
-    5 cards is ID'd for both methods
-    
-    Plus the ID'd straight might not be the straight flush,
-    so have to check if there are *any* straight flushes, not
-    just the flush or straight that id ID'd
-    """
     
     """
     TODO
@@ -162,36 +153,74 @@ class HandSorter:
     @staticmethod
     def is_four_of_a_kind(hand):
         numbers = HandSorter.get_hand_numbers(hand)
-            
+        
+        four_of_a_kind_number = False
         for number in numbers[:4]:
             if numbers.count(number) == 4:
-                return number
-            
-        return False
+                four_of_a_kind_number = number
+                break
+                
+        if not four_of_a_kind_number:
+            return False
+        
+        hand_without_cards, hand_with_cards = HandSorter.get_split_hands(hand, four_of_a_kind_number)
+        
+        four_of_a_kind = hand_with_cards
+        
+        sorted_hand = HandSorter.sort_cards(hand_without_cards)
+        four_of_a_kind.append(sorted_hand[0])
+                              
+        return {'score': Hand.FOUR_OF_A_KIND, 'hand': four_of_a_kind}
     
     @staticmethod
     def is_three_of_a_kind(hand):
         numbers = HandSorter.get_hand_numbers(hand)
-            
         numbers.sort(reverse=True)
         
+        three_of_a_kind_number = False
         for number in numbers[:5]:
             if numbers.count(number) == 3:
-                return number
+                three_of_a_kind_number = number
+                break
+                
+        if not three_of_a_kind_number:
+            return False
+        
+        hand_without_cards, hand_with_cards = HandSorter.get_split_hands(hand, three_of_a_kind_number)
+        
+        three_of_a_kind = hand_with_cards
+        
+        sorted_hand = HandSorter.sort_cards(hand_without_cards)
+        
+        three_of_a_kind.append(sorted_hand[0])
+        three_of_a_kind.append(sorted_hand[1])
             
-        return False
+        return {'score': Hand.THREE_OF_A_KIND, 'hand': three_of_a_kind}
     
     @staticmethod
     def is_pair(hand):
         numbers = HandSorter.get_hand_numbers(hand)
-            
         numbers.sort(reverse=True)
         
         for number in numbers[:6]:
             if numbers.count(number) == 2:
-                return number
+                pair_number = number
+                break
+                
+        if not pair_number:
+            return False
+        
+        hand_without_cards, hand_with_cards = HandSorter.get_split_hands(hand, pair_number)
+        
+        pair = hand_with_cards
+        
+        sorted_hand = HandSorter.sort_cards(hand_without_cards)
+        
+        pair.append(sorted_hand[0])
+        pair.append(sorted_hand[1])
+        pair.append(sorted_hand[2])
             
-        return False
+        return {'score': Hand.PAIR, 'hand': pair}
     
     @staticmethod
     def is_two_pair(hand):

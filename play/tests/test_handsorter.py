@@ -52,7 +52,7 @@ class HandSorterTestCase(TestCase):
         
         hand = HandSorter.get_best_hand(hand)
         
-        self.assertEqual(hand, (Hand.STRAIGHT_FLUSH, 6))
+        self.assertEqual(hand['score'], Hand.STRAIGHT_FLUSH)
         
         hand = []
             
@@ -112,6 +112,7 @@ class HandSorterTestCase(TestCase):
         self.assertEqual(returned_hand[3].number, 3)
         self.assertEqual(returned_hand[2].number, 4)
         self.assertEqual(returned_hand[1].number, 5)
+        self.assertEqual(is_straight['score'], Hand.STRAIGHT)
         
     def test_isnt_straight_returns_false(self):
         hand = []
@@ -128,7 +129,7 @@ class HandSorterTestCase(TestCase):
         
         self.assertFalse(is_straight)
         
-    def test_is_four_of_a_kind_returns_number(self):
+    def test_is_four_of_a_kind_returns_hand(self):
         hand = []
             
         hand.append(Card(suit=Suit.CLUB, number=2))
@@ -141,7 +142,12 @@ class HandSorterTestCase(TestCase):
         
         is_four_of_a_kind = HandSorter.is_four_of_a_kind(hand)
         
-        self.assertEqual(is_four_of_a_kind, 2)
+        self.assertEqual(is_four_of_a_kind['score'], Hand.FOUR_OF_A_KIND)
+        self.assertEqual(is_four_of_a_kind['hand'][0].number, 2)
+        self.assertEqual(is_four_of_a_kind['hand'][1].number, 2)
+        self.assertEqual(is_four_of_a_kind['hand'][2].number, 2)
+        self.assertEqual(is_four_of_a_kind['hand'][3].number, 2)
+        self.assertEqual(is_four_of_a_kind['hand'][4].number, 14)
         
     def test_isnt_four_of_a_kind_returns_false(self):
         hand = []
@@ -172,7 +178,16 @@ class HandSorterTestCase(TestCase):
         
         is_three_of_a_kind = HandSorter.is_three_of_a_kind(hand)
         
-        self.assertEqual(is_three_of_a_kind, 3)
+        for card in is_three_of_a_kind['hand']:
+            print(card.suit)
+            print(card.number)
+        
+        self.assertEqual(is_three_of_a_kind['score'], Hand.THREE_OF_A_KIND)
+        self.assertEqual(is_three_of_a_kind['hand'][0].number, 3)
+        self.assertEqual(is_three_of_a_kind['hand'][1].number, 3)
+        self.assertEqual(is_three_of_a_kind['hand'][2].number, 3)
+        self.assertEqual(is_three_of_a_kind['hand'][3].number, 14)
+        self.assertEqual(is_three_of_a_kind['hand'][4].number, 2)
         
     def test_isnt_three_of_a_kind_returns_false(self):
         hand = []
@@ -204,7 +219,12 @@ class HandSorterTestCase(TestCase):
         
         is_pair = HandSorter.is_pair(hand)
         
-        self.assertEqual(is_pair, 2) 
+        self.assertEqual(is_pair['score'], Hand.PAIR)
+        self.assertEqual(is_pair['hand'][0].number, 2)
+        self.assertEqual(is_pair['hand'][1].number, 2)
+        self.assertEqual(is_pair['hand'][2].number, 7)
+        self.assertEqual(is_pair['hand'][3].number, 6)
+        self.assertEqual(is_pair['hand'][4].number, 5)
         
     def test_isnt_pair_returns_false(self):
         hand = []
