@@ -124,6 +124,7 @@ class HandSorter:
     @staticmethod
     def is_straight(hand):
         numbers = HandSorter.get_hand_numbers(hand)
+        print(numbers)
         ordered_hand = HandSorter.sort_cards(hand)
         
         high_straight_card = False
@@ -133,9 +134,11 @@ class HandSorter:
                 and card.number - 3 in numbers
                 and card.number - 4 in numbers):
                     high_straight_card = card
+                    print(high_straight_card)
                     break
-            else:
-                return False
+        
+        if not high_straight_card:
+            return False
             
         cards_to_eval = ordered_hand[ordered_hand.index(high_straight_card):]
         straight_hand = [cards_to_eval[0]]

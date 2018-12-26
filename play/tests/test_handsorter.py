@@ -67,6 +67,21 @@ class HandSorterTestCase(TestCase):
         hand = HandSorter.get_best_hand(hand)
         
         self.assertEqual(hand['score'], Hand.FULL_HOUSE)
+        
+        hand = []
+        
+        hand.append(Card(suit=Suit.CLUB, number=2))
+        hand.append(Card(suit=Suit.DIAMOND, number=11))
+        hand.append(Card(suit=Suit.SPADE, number=5))
+        hand.append(Card(suit=Suit.HEART, number=6))
+        hand.append(Card(suit=Suit.DIAMOND, number=7))
+        
+        hand.append(Card(suit=Suit.CLUB, number=8))
+        hand.append(Card(suit=Suit.CLUB, number=9))
+        
+        hand = HandSorter.get_best_hand(hand)
+        
+        self.assertEqual(hand['score'], Hand.STRAIGHT)
     
     def test_is_flush_ids_a_flush(self):
         hand = []
@@ -95,23 +110,29 @@ class HandSorterTestCase(TestCase):
         self.assertFalse(is_flush)
     
     def test_is_straight_returns_straight_hand(self):
+        
         hand = []
-        for number in range(2, 7):
-            card = Card(suit=Suit.DIAMOND, number=number)
-            hand.append(card)
-            
-        hand.append(Card(suit=Suit.CLUB, number=6))
-        hand.append(Card(suit=Suit.CLUB, number=5))
+        
+        hand.append(Card(suit=Suit.CLUB, number=2))
+        hand.append(Card(suit=Suit.DIAMOND, number=11))
+        hand.append(Card(suit=Suit.SPADE, number=5))
+        hand.append(Card(suit=Suit.HEART, number=6))
+        hand.append(Card(suit=Suit.DIAMOND, number=7))
+        
+        hand.append(Card(suit=Suit.CLUB, number=8))
+        hand.append(Card(suit=Suit.CLUB, number=9))
         
         is_straight = HandSorter.is_straight(hand)
+        self.assertTrue(is_straight)
         
         self.assertEqual(len(is_straight['hand']), 5)
         returned_hand = is_straight['hand']
-        self.assertEqual(returned_hand[0].number, 6)
-        self.assertEqual(returned_hand[4].number, 2)
-        self.assertEqual(returned_hand[3].number, 3)
-        self.assertEqual(returned_hand[2].number, 4)
-        self.assertEqual(returned_hand[1].number, 5)
+        self.assertEqual(returned_hand[0].number, 9)
+        self.assertEqual(returned_hand[4].number, 5)
+        self.assertEqual(returned_hand[3].number, 6)
+        self.assertEqual(returned_hand[2].number, 7)
+        self.assertEqual(returned_hand[1].number, 8)
+        
         self.assertEqual(is_straight['score'], Hand.STRAIGHT)
         
     def test_isnt_straight_returns_false(self):

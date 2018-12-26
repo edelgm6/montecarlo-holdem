@@ -1,5 +1,6 @@
 from django.test import TestCase
 from play.models import Game, Deck, Card, Stage, Suit
+from play.rules import Hand
 
 class PlayerTestCase(TestCase):
     def test_can_create_player(self):
@@ -22,15 +23,6 @@ class PlayerTestCase(TestCase):
         
         game.set_player_hands()
         player = game.players[0]
-        
-    def test_get_winning_player(self):
-        game = Game()
-        game.deal()
-        game.deal()
-        game.deal()
-        game.deal()
-        
-        game.get_winning_player()
 
 class CardTestCase(TestCase):
     def test_can_create_card(self):
@@ -53,6 +45,89 @@ class GameTestCase(TestCase):
         self.assertTrue(game.deck)
         self.assertEqual(len(game.deck.cards), 52)
         
+    def test_get_winning_player_returns_player1(self):
+        game = Game(additional_players=1)
+        
+        #community cards
+        game.community.append(Card(suit=Suit.CLUB, number=2))
+        game.community.append(Card(suit=Suit.DIAMOND, number=11))
+        game.community.append(Card(suit=Suit.SPADE, number=5))
+        game.community.append(Card(suit=Suit.HEART, number=6))
+        game.community.append(Card(suit=Suit.DIAMOND, number=7))
+        
+        #player1 cards
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.CLUB, number=8))
+        player1.hand.append(Card(suit=Suit.CLUB, number=9))
+        
+        #player2 cards
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.DIAMOND, number=2))
+        player2.hand.append(Card(suit=Suit.SPADE, number=2))
+        
+        game.set_player_hands()
+        winner = game.get_winning_player()
+        
+        self.assertEqual(winner[0], player1)
+        self.assertEqual(winner[0].best_hand['score'], Hand.STRAIGHT)
+        self.assertEqual(player2.best_hand['score'], Hand.THREE_OF_A_KIND)
+        
+    def test_get_winning_player_returns_player1_with_tie(self):
+        game = Game(additional_players=1)
+        
+        #community cards
+        game.community.append(Card(suit=Suit.CLUB, number=2))
+        game.community.append(Card(suit=Suit.DIAMOND, number=11))
+        game.community.append(Card(suit=Suit.SPADE, number=5))
+        game.community.append(Card(suit=Suit.HEART, number=6))
+        game.community.append(Card(suit=Suit.DIAMOND, number=7))
+        
+        #player1 cards
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.CLUB, number=8))
+        player1.hand.append(Card(suit=Suit.CLUB, number=9))
+        
+        #player2 cards
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.DIAMOND, number=4))
+        player2.hand.append(Card(suit=Suit.SPADE, number=3))
+        
+        game.set_player_hands()
+        winner = game.get_winning_player()
+        
+        self.assertEqual(winner[0], player1)
+        self.assertEqual(winner[0].best_hand['score'], Hand.STRAIGHT)
+        self.assertEqual(player2.best_hand['score'], Hand.STRAIGHT)
+        self.assertEqual(player2.best_hand['hand'][0].number, 7)
+        self.assertEqual(player1.best_hand['hand'][0].number, 9)
+        
+    def test_get_winning_player_returns_both_players_with_true_tie(self):
+        game = Game(additional_players=1)
+        
+        #community cards
+        game.community.append(Card(suit=Suit.CLUB, number=2))
+        game.community.append(Card(suit=Suit.DIAMOND, number=11))
+        game.community.append(Card(suit=Suit.SPADE, number=5))
+        game.community.append(Card(suit=Suit.HEART, number=6))
+        game.community.append(Card(suit=Suit.DIAMOND, number=7))
+        
+        #player1 cards
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.CLUB, number=8))
+        player1.hand.append(Card(suit=Suit.CLUB, number=9))
+        
+        #player2 cards
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.DIAMOND, number=8))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number=9))
+        
+        game.set_player_hands()
+        winners = game.get_winning_player()
+        
+        self.assertTrue(player1 in winners)
+        self.assertTrue(player2 in winners)
+
+    
     def test_preflop_deal_gives_each_player_2_cards(self):
         game = Game(additional_players=2)
         

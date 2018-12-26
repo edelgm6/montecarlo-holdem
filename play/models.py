@@ -1,5 +1,6 @@
 from django.db import models
 from play.handsorter import HandSorter
+from play.tiebreaker import TieBreaker
 from play.rules import Suit, Hand, Stage
 from random import shuffle
 from operator import itemgetter
@@ -40,10 +41,33 @@ class Game:
             
             self.community.append(self.deck.cards.pop())
             self.stage = Stage(self.stage.value + 1)
-            
+     
+    
+    #Get rid of this and fold into the get_winning_player method
     def set_player_hands(self):
         for player in self.players:
             player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
+            
+    def get_winning_player(self):
+        
+        contenders = [self.players[0]]
+        for player in self.players[1:]:
+            top_score = contenders[0].best_hand['score'].value
+            player_score = player.best_hand['score'].value
+            if player_score == top_score:
+                contenders.append(player)
+            elif player_score < top_score:
+                contenders = [player]
+          
+        if len(contenders) > 1:
+            winners = TieBreaker.break_tie(contenders)
+        else:
+            winners = contenders
+            
+        return winners
+                
+            
+            
             
     
     """
