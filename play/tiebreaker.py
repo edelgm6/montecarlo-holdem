@@ -22,20 +22,33 @@ class TieBreaker:
     
     def break_of_a_kind(players):
         score = players[0].best_hand['score']
-        
         if score == Hand.FOUR_OF_A_KIND:
-            top_players = [players[0]]
-            for player in players[1:]:
-                top_hand = top_players[0].best_hand['hand']
-                player_hand = player.best_hand['hand']
-                
-                if top_hand[0].number < player_hand[0].number:
-                    top_players = [player]
-                elif top_hand[0].number == player_hand[0].number:
-                    if top_hand[-1].number < player_hand[0].number:
+            index = 4
+        elif score == Hand.THREE_OF_A_KIND:
+            index = 3
+        elif score == Hand.PAIR:
+            index = 2
+
+        top_players = [players[0]]
+        for player in players[1:]:
+            append_player = True
+            top_hand = top_players[0].best_hand['hand']
+            player_hand = player.best_hand['hand']       
+
+            if top_hand[0].number < player_hand[0].number:
+                top_players = [player] 
+            elif top_hand[0].number == player_hand[0].number:
+
+                for i in range(index, 5):
+                    if top_hand[i].number < player_hand[i].number:
                         top_players = [player]
-                    elif top_hand[-1].number == player_hand[-1].number:
-                        top_players.append(player)
+                        append_player = False
+                    elif top_hand[i].number > player_hand[i].number:
+                        append_player = False
+                        break
+                        
+            if append_player:
+                top_players.append(player)
                         
         return top_players
     
