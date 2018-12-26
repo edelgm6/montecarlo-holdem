@@ -5,7 +5,6 @@ class TieBreaker:
     @staticmethod
     def break_tie(players):
         score = players[0].best_hand['score']
-        print(score)
         
         if (score == Hand.STRAIGHT or score == Hand.STRAIGHT_FLUSH):
             winners = TieBreaker.break_straight(players)
@@ -13,17 +12,37 @@ class TieBreaker:
         if score == Hand.FLUSH:
             winners = TieBreaker.break_flush(players)
             
+        if (score == Hand.FOUR_OF_A_KIND 
+            or score == Hand.THREE_OF_A_KIND
+            or score == Hand.PAIR):
+            
+            winners = TieBreaker.break_of_a_kind(players)
+            
         return winners
+    
+    def break_of_a_kind(players):
+        score = players[0].best_hand['score']
         
+        if score == Hand.FOUR_OF_A_KIND:
+            top_players = [players[0]]
+            for player in players[1:]:
+                top_hand = top_players[0].best_hand['hand']
+                player_hand = player.best_hand['hand']
+                
+                if top_hand[0].number < player_hand[0].number:
+                    top_players = [player]
+                elif top_hand[0].number == player_hand[0].number:
+                    if top_hand[-1].number < player_hand[0].number:
+                        top_players = [player]
+                    elif top_hand[-1].number == player_hand[-1].number:
+                        top_players.append(player)
+                        
+        return top_players
+    
     def break_flush(players):
         
         top_players = [players[0]]
         for player in players[1:]:
-            print(player)
-            print(player.best_hand['score'])
-            for card in player.best_hand['hand']:
-                print(card.suit)
-                print(card.number)
             top_hand = top_players[0].best_hand['hand']
             player_hand = player.best_hand['hand']
             

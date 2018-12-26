@@ -27,7 +27,7 @@ class HandSorter:
             # Last i elements are already in place 
             for j in range(0, n-i-1): 
 
-                # traverse the array from 0 to n-i-1 
+                # Traverse the array from 0 to n-i-1 
                 # Swap if the element found is greater 
                 # than the next element 
                 if hand[j].number < hand[j+1].number : 
@@ -35,7 +35,16 @@ class HandSorter:
         
         return hand
     
+    """
+    TODO:
+    Remove now redundant additional sorting in other is_xxx methods
+    (it's covered now by the sort_cards called at the top of
+    get_best_hand)
+    """
+    
     def get_best_hand(hand):
+        hand = HandSorter.sort_cards(hand)
+        
         is_hand = HandSorter.is_straight_flush(hand)
         if is_hand:
             return is_hand
