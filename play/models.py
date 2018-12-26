@@ -12,10 +12,10 @@ class Game:
         self.players = []
         self.community = []
         
-        self.players.append(Player(game=self, is_user=True))
+        self.players.append(Player(is_user=True))
         
         for player in range(additional_players):
-            self.players.append(Player(game=self))
+            self.players.append(Player())
             
     def deal(self):
         if self.stage == Stage.PREDEAL:
@@ -87,20 +87,12 @@ class Game:
             
             
 class Player:
-    def __init__(self, game, is_user=False):
+    def __init__(self, is_user=False):
         self.hand = []
         self.is_user = is_user
-        #self.game = game
-    
-    #def get_total_hand(self):
-    #    total_hand = []
-        
-    #    return self.hand + self.game.community
-        
-        
+               
 class Deck:
     def __init__(self):
-        #suits = [Suit.DIAMOND, Suit.SPADE, Suit.HEART, Suit.CLUB]
         suits = [s for s in Suit]
         numbers = [2,3,4,5,6,7,8,9,10,11,12,13,14]
         self.cards = []

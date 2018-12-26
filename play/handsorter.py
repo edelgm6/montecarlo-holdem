@@ -106,7 +106,7 @@ class HandSorter:
         suits = []
         for card in hand:
             suits.append(card.suit)
-            
+
         for suit in [s for s in Suit]:
             if suits.count(suit) >= 5:
                 flush_suit = suit
@@ -124,7 +124,6 @@ class HandSorter:
     @staticmethod
     def is_straight(hand):
         numbers = HandSorter.get_hand_numbers(hand)
-        print(numbers)
         ordered_hand = HandSorter.sort_cards(hand)
         
         high_straight_card = False
@@ -134,7 +133,6 @@ class HandSorter:
                 and card.number - 3 in numbers
                 and card.number - 4 in numbers):
                     high_straight_card = card
-                    print(high_straight_card)
                     break
         
         if not high_straight_card:
