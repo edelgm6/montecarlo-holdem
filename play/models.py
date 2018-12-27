@@ -4,6 +4,13 @@ from play.rules import Suit, Hand, Stage
 from random import shuffle
 from operator import itemgetter
 
+class Simulation:
+    def __init__(self, runs=1000, additional_players=1, **kwargs):
+        self.runs = runs
+        self.game = (Game(additional_players=additional_players))
+        """Create players here and pass the list into Game"""
+        
+        
 class Game:
     def __init__(self, additional_players=1):
         self.deck = Deck()
@@ -73,7 +80,7 @@ class Game:
             cards = [0, 2, 4]
         elif score == Hand.FLUSH or score == Hand.HIGH_CARD:
             cards = range(5)
-        elif score == Hand.STRAIGHT:
+        elif score == Hand.STRAIGHT or score == Hand.STRAIGHT_FLUSH:
             cards = [0]
         elif score == Hand.FOUR_OF_A_KIND:
             cards = [0, 4]

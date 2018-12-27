@@ -364,6 +364,70 @@ class FourBreakerTestCase(TestCase):
         self.assertEqual(player1.best_hand['score'], Hand.FOUR_OF_A_KIND)
         self.assertEqual(player2.best_hand['score'], Hand.FOUR_OF_A_KIND)
 
+
+class StraightFlushBreakerTestCase(TestCase):
+
+    def test_returns_winner_for_straight_flush(self):
+        
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 10))
+        game.community.append(Card(suit=Suit.CLUB, number = 11))
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.CLUB, number = 13))
+        game.community.append(Card(suit=Suit.CLUB, number = 9))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 8))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 14))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = game.break_tie(players)
+        
+        self.assertFalse(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.STRAIGHT_FLUSH)
+        self.assertEqual(player2.best_hand['score'], Hand.STRAIGHT_FLUSH)
+
+    
+    
+    def test_returns_tie_for_straights(self):
+        
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 10))
+        game.community.append(Card(suit=Suit.CLUB, number = 11))
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.CLUB, number = 13))
+        game.community.append(Card(suit=Suit.CLUB, number = 9))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 8))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 2))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = game.break_tie(players)
+        
+        self.assertTrue(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.STRAIGHT_FLUSH)
+        self.assertEqual(player2.best_hand['score'], Hand.STRAIGHT_FLUSH)        
+        
+        
 class StraightBreakerTestCase(TestCase):
 
     def test_returns_winner_for_straights(self):
