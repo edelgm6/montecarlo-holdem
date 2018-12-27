@@ -1,6 +1,5 @@
 from django.test import TestCase
 from play.models import Game, Deck, Card, Stage, Suit, Hand, Player
-from play.tiebreaker import TieBreaker
 
 class HighCardBreakerTestCase(TestCase):
 
@@ -26,7 +25,7 @@ class HighCardBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertFalse(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -55,7 +54,7 @@ class HighCardBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -87,7 +86,7 @@ class FullHouseBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertFalse(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -116,7 +115,7 @@ class FullHouseBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -147,7 +146,7 @@ class TwoPairBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertFalse(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -176,7 +175,7 @@ class TwoPairBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -208,7 +207,7 @@ class PairBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertFalse(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -237,7 +236,7 @@ class PairBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -269,7 +268,7 @@ class ThreeBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertFalse(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -298,7 +297,7 @@ class ThreeBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -329,7 +328,7 @@ class FourBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertFalse(player2 in winners)
@@ -358,7 +357,7 @@ class FourBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -389,7 +388,7 @@ class StraightBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertFalse(player2 in winners)
@@ -420,7 +419,7 @@ class StraightBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -457,7 +456,7 @@ class FlushBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertTrue(player2 in winners)
@@ -492,7 +491,7 @@ class FlushBreakerTestCase(TestCase):
         
         game.set_player_hands()
         
-        winners = TieBreaker.break_tie(players)
+        winners = game.break_tie(players)
         
         self.assertTrue(player1 in winners)
         self.assertFalse(player2 in winners)

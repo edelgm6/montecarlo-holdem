@@ -1,6 +1,5 @@
 from django.db import models
 from play.handsorter import HandSorter
-from play.tiebreaker import TieBreaker
 from play.rules import Suit, Hand, Stage
 from random import shuffle
 from operator import itemgetter
@@ -60,31 +59,47 @@ class Game:
                 contenders = [player]
           
         if len(contenders) > 1:
-            winners = TieBreaker.break_tie(contenders)
+            winners = self.break_tie(contenders)
         else:
             winners = contenders
             
         return winners
-                
-            
-            
-            
     
-    """
-    TODO:
-    1. Make set hands method set the name of the hand and the cards themselves
-    2. Compare each player's hand to see which one wins
-    3. If there is a tie, pass each player's cards to a tie-breaker method
-    
-    def get_winning_player(self):
-        self.set_player_hands()
+    def break_tie(self, players):
+        score = players[0].best_hand['score']
+        if score == Hand.FULL_HOUSE:
+            cards = [0, 3]
+        elif score == Hand.TWO_PAIR:
+            cards = [0, 2, 4]
+        elif score == Hand.FLUSH or score == Hand.HIGH_CARD:
+            cards = range(5)
+        elif score == Hand.STRAIGHT:
+            cards = [0]
+        elif score == Hand.FOUR_OF_A_KIND:
+            cards = [0, 4]
+        elif score == Hand.THREE_OF_A_KIND:
+            cards = [0, 3, 4]
+        elif score == Hand.PAIR:
+            cards = [0, 2, 3, 4]
         
-        top_hands = [self.players[0].best_hand]
-        top_hand = self.players.best_hand
-        for player in self.players[1::
-    """        
-            
-            
+        top_players = [players[0]]
+        for player in players[1:]:
+            append_player = True
+            top_hand = top_players[0].best_hand['hand']
+            player_hand = player.best_hand['hand']
+
+            for i in cards:
+                if top_hand[i].number < player_hand[i].number:
+                    top_players = [player]
+                    append_player = False
+                elif top_hand[i].number > player_hand[i].number:
+                    append_player = False
+                    break
+
+            if append_player:
+                top_players.append(player)
+
+        return top_players
             
 class Player:
     def __init__(self, is_user=False):
