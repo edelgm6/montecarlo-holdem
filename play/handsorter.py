@@ -259,7 +259,8 @@ class HandSorter:
                 
             sorted_hand = HandSorter.sort_cards(remaining_hand)
             
-            two_pair = [high_pair, low_pair, sorted_hand[0]]
+            two_pair = high_pair + low_pair
+            two_pair.append(sorted_hand[0])
             
             return {'score': Hand.TWO_PAIR, 'hand': two_pair}
                  
@@ -275,7 +276,7 @@ class HandSorter:
             two_of_a_kind_hand = HandSorter.is_pair(hand_without_three_cards)
             if two_of_a_kind_hand:
                 hand_without_pair_cards, pair = HandSorter.get_split_hands(two_of_a_kind_hand['hand'], two_of_a_kind_hand['hand'][0].number)
-                return {'score': Hand.FULL_HOUSE, 'hand': [three_of_a_kind, pair]}
+                return {'score': Hand.FULL_HOUSE, 'hand': three_of_a_kind + pair}
             
         return False
     

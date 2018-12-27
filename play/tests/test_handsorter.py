@@ -276,11 +276,11 @@ class HandSorterTestCase(TestCase):
         is_full_house = HandSorter.is_full_house(hand)
         
         self.assertEqual(is_full_house['score'], Hand.FULL_HOUSE)
-        self.assertEqual(is_full_house['hand'][0][0].number, 3)
-        self.assertEqual(is_full_house['hand'][0][1].number, 3)
-        self.assertEqual(is_full_house['hand'][0][2].number, 3)
-        self.assertEqual(is_full_house['hand'][1][0].number, 6)
-        self.assertEqual(is_full_house['hand'][1][1].number, 6)
+        self.assertEqual(is_full_house['hand'][0].number, 3)
+        self.assertEqual(is_full_house['hand'][1].number, 3)
+        self.assertEqual(is_full_house['hand'][2].number, 3)
+        self.assertEqual(is_full_house['hand'][3].number, 6)
+        self.assertEqual(is_full_house['hand'][4].number, 6)
         
     def test_is_two_pair_returns_two_pairs_and_kicker(self):
         hand = []
@@ -296,11 +296,11 @@ class HandSorterTestCase(TestCase):
         is_two_pair = HandSorter.is_two_pair(hand)
         
         self.assertEqual(is_two_pair['score'], Hand.TWO_PAIR)
-        self.assertEqual(is_two_pair['hand'][0][0].number, 9)
-        self.assertEqual(is_two_pair['hand'][0][1].number, 9)
-        self.assertEqual(is_two_pair['hand'][1][0].number, 3)
-        self.assertEqual(is_two_pair['hand'][1][1].number, 3)
-        self.assertEqual(is_two_pair['hand'][2].number, 7)
+        self.assertEqual(is_two_pair['hand'][0].number, 9)
+        self.assertEqual(is_two_pair['hand'][1].number, 9)
+        self.assertEqual(is_two_pair['hand'][2].number, 3)
+        self.assertEqual(is_two_pair['hand'][3].number, 3)
+        self.assertEqual(is_two_pair['hand'][4].number, 7)
         
     def test_isnt_two_pair_returns_false(self):
         hand = []

@@ -2,6 +2,188 @@ from django.test import TestCase
 from play.models import Game, Deck, Card, Stage, Suit, Hand, Player
 from play.tiebreaker import TieBreaker
 
+class HighCardBreakerTestCase(TestCase):
+
+    def test_returns_winner_for_tied_high_card(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 14))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 13))
+        game.community.append(Card(suit=Suit.SPADE, number = 12))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 8))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 2))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 9))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertFalse(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.HIGH_CARD)
+        self.assertEqual(player2.best_hand['score'], Hand.HIGH_CARD)
+    
+    def test_returns_winners_for_tied_pair(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 14))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 13))
+        game.community.append(Card(suit=Suit.SPADE, number = 12))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 8))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 2))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 4))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertTrue(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.HIGH_CARD)
+        self.assertEqual(player2.best_hand['score'], Hand.HIGH_CARD)
+
+
+class FullHouseBreakerTestCase(TestCase):
+
+    def test_returns_winner_for_tied_full_house(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 12))
+        game.community.append(Card(suit=Suit.SPADE, number = 11))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 11))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 10))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 10)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 14))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 14)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertFalse(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.FULL_HOUSE)
+        self.assertEqual(player2.best_hand['score'], Hand.FULL_HOUSE)
+    
+    def test_returns_winners_for_tied_pair(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 12))
+        game.community.append(Card(suit=Suit.SPADE, number = 11))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 11))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 14))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 14))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertTrue(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.FULL_HOUSE)
+        self.assertEqual(player2.best_hand['score'], Hand.FULL_HOUSE)
+
+class TwoPairBreakerTestCase(TestCase):
+
+    def test_returns_winner_for_tied_pair(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 12))
+        game.community.append(Card(suit=Suit.SPADE, number = 11))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 13))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 10))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 14))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertFalse(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.TWO_PAIR)
+        self.assertEqual(player2.best_hand['score'], Hand.TWO_PAIR)
+    
+    def test_returns_winners_for_tied_pair(self):
+
+        game = Game(additional_players=1)
+        
+        game.community.append(Card(suit=Suit.CLUB, number = 12))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 12))
+        game.community.append(Card(suit=Suit.SPADE, number = 11))
+        game.community.append(Card(suit=Suit.HEART, number = 11))
+        game.community.append(Card(suit=Suit.DIAMOND, number = 13))
+        
+        player1 = game.players[0]
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 14))
+        player1.hand.append(Card(suit=Suit.DIAMOND, number = 3)) 
+        
+        player2 = game.players[1]
+        player2.hand.append(Card(suit=Suit.CLUB, number = 14))
+        player2.hand.append(Card(suit=Suit.DIAMOND, number = 5)) 
+            
+        players = [player1, player2]
+        
+        game.set_player_hands()
+        
+        winners = TieBreaker.break_tie(players)
+        
+        self.assertTrue(player1 in winners)
+        self.assertTrue(player2 in winners)
+        self.assertEqual(player1.best_hand['score'], Hand.TWO_PAIR)
+        self.assertEqual(player2.best_hand['score'], Hand.TWO_PAIR)
+
+
 class PairBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_pair(self):
