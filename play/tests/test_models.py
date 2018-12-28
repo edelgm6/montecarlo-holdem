@@ -6,6 +6,12 @@ import cProfile
 class SimulationTestCase(TestCase):
     
     """
+    TODO
+    Add in test for being fewer additional hands than additional users
+    """
+    
+    
+    """
     def do_cprofile(func):
         def profiled_func(*args, **kwargs):
             profile = cProfile.Profile()
@@ -27,16 +33,11 @@ class SimulationTestCase(TestCase):
     @do_cprofile
     """
     
-    """
-    TODO
-    Test that specified user hands are actually enforced with each test
-    """
-    
     def test_simulation_with_user_and_multiple_other_starting_hand(self):
-        user_hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
-        other_hands = [Card(suit=Suit.DIAMOND, number=13), Card(suit=Suit.CLUB, number=13), Card(suit=Suit.HEART, number=13), Card(suit=Suit.SPADE, number=14)]
+        user_hand = ['D14', 'C14']
+        other_hands = [['D13', 'C13'], ['H13', 'H14']]
         
-        simulation = Simulation(user_hand=user_hand, additional_players=2, additional_hands=[other_hands])
+        simulation = Simulation(user_hand=user_hand, additional_players=2, additional_hands=other_hands)
         
         results = simulation.run_simulation()
         print(results)
@@ -55,12 +56,15 @@ class SimulationTestCase(TestCase):
         self.assertEqual(ties, results['ties'])
         self.assertEqual(count, 1000)
         self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
+        self.assertFalse(results['ties'] == 0)
+        self.assertFalse(results['wins'] == 0)
+        self.assertFalse(results['losses'] == 0)
     
     def test_simulation_with_user_and_other_starting_hand(self):
-        user_hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
-        other_hand = [Card(suit=Suit.DIAMOND, number=13), Card(suit=Suit.CLUB, number=13)]
+        user_hand = ['D14', 'C14']
+        other_hands = [['D13', 'C13']]
         
-        simulation = Simulation(user_hand=user_hand, additional_hands=[other_hand])
+        simulation = Simulation(user_hand=user_hand, additional_hands=other_hands)
         
         results = simulation.run_simulation()
         print(results)
@@ -79,9 +83,12 @@ class SimulationTestCase(TestCase):
         self.assertEqual(ties, results['ties'])
         self.assertEqual(count, 1000)
         self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
+        self.assertFalse(results['ties'] == 0)
+        self.assertFalse(results['wins'] == 0)
+        self.assertFalse(results['losses'] == 0)
     
     def test_simulation_with_user_starting_hand(self):
-        hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+        hand = ['D14', 'C14']
         
         simulation = Simulation(user_hand=hand)
         
@@ -102,6 +109,9 @@ class SimulationTestCase(TestCase):
         self.assertEqual(ties, results['ties'])
         self.assertEqual(count, 1000)
         self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
+        self.assertFalse(results['ties'] == 0)
+        self.assertFalse(results['wins'] == 0)
+        self.assertFalse(results['losses'] == 0)
     
     def test_simulation_returns_coherent_results(self):
         simulation = Simulation()
@@ -121,6 +131,9 @@ class SimulationTestCase(TestCase):
         self.assertEqual(wins, results['wins'])
         self.assertEqual(ties, results['ties'])
         self.assertEqual(count, 1000)
+        self.assertFalse(results['ties'] == 0)
+        self.assertFalse(results['wins'] == 0)
+        self.assertFalse(results['losses'] == 0)
 
 class PlayerTestCase(TestCase):
     def test_can_create_player(self):
@@ -161,13 +174,31 @@ class DeckTestCase(TestCase):
         self.assertEqual(len(deck.cards),52)
         
 class GameTestCase(TestCase):
-    def test_game_creates_deck(self):
+    
+    def test_deal_maintains_player_start_hands(self):
+        user_hand = ['D4', 'C14']
+        other_hand = [['D13', 'C13']]
+        player1 = Player(is_user=True, starting_hand=user_hand)
+        player2 = Player(starting_hand=other_hand[0])
+        
+        players = [player1, player2]         
+        game = Game(players)
+        
+        game.deal()
+        
+        self.assertTrue(repr(player1.hand[0]) in [player1.starting_hand[0], player1.starting_hand[1]])
+        self.assertTrue(repr(player1.hand[1]) in [player1.starting_hand[0], player1.starting_hand[1]])
+        self.assertTrue(repr(player2.hand[0]) in [player2.starting_hand[0], player2.starting_hand[1]])
+        self.assertTrue(repr(player2.hand[1]) in [player2.starting_hand[0], player2.starting_hand[1]])
+    
+    def test_game_creates_shuffled_deck(self):
         players = [Player(), Player(), Player()]         
         game = Game(players)
         
         self.assertTrue(game.deck)
         self.assertEqual(len(game.deck.cards), 52)
-        
+        self.assertTrue(game.deck.cards[0].number != 2 or game.deck.cards[0].number != 3)
+    
     def test_get_winning_player_returns_player1(self):
         players = [Player(), Player()]         
         game = Game(players)

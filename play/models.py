@@ -7,7 +7,6 @@ class Simulation:
     def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[None]):
         self.runs = runs
         self.user = Player(is_user=True, starting_hand=user_hand)
-        self.user.starting_hand = user_hand
         
         self.other_players = []
         for player, hand in zip(range(additional_players), additional_hands):
@@ -29,7 +28,7 @@ class Simulation:
             for player in self.all_players:
                 player.hand = []
             
-            game = Game(other_players=self.other_players, user=self.user)
+            game = Game(players=self.all_players)
             game.deal()
             game.deal()
             game.deal()
@@ -53,31 +52,27 @@ class Simulation:
         return results
                      
 class Game:
-    def __init__(self, other_players, user):
+    def __init__(self, players):
         self.deck = Deck()
         self.stage = Stage.PREDEAL
-        self.user = user
-        self.other_players = other_players
-        self.all_players = [user] + self.other_players
+        self.players = players
         self.community = []
             
     def deal(self):
         if self.stage == Stage.PREDEAL:
-            players_with_starting_hands = [player for player in self.all_players if player.starting_hand]
-            players_without_starting_hands = [player for player in self.all_players if not player.starting_hand]
+            players_with_starting_hands = [player for player in self.players if player.starting_hand]
+            players_without_starting_hands = [player for player in self.players if not player.starting_hand]
             
             for player in players_with_starting_hands:
-                player_cards = []
                 starting_hand = player.starting_hand
                 for card in self.deck.cards:
-                    if (card.suit == starting_hand[0].suit and card.number == starting_hand[0].number) or (card.suit == starting_hand[1].suit and card.number == starting_hand[1].number):
-                        player_cards.append(card)
-                        if len(player_cards) == 2:
+                    if repr(card) == starting_hand[0] or repr(card) == starting_hand[1]:
+                        player.hand.append(card)
+                        if len(player.hand) == 2:
                             break
-                    
-                player.hand += player_cards
-                self.deck.cards.remove(player_cards[0])
-                self.deck.cards.remove(player_cards[1])
+                            
+                self.deck.cards.remove(player.hand[0])
+                self.deck.cards.remove(player.hand[1])
                 
             for round in range(2):
                 for player in players_without_starting_hands:
@@ -105,13 +100,13 @@ class Game:
     
     #Get rid of this and fold into the get_winning_player method
     def set_player_hands(self):
-        for player in self.all_players:
+        for player in self.players:
             player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
             
     def get_winning_player(self):
         
-        contenders = [self.all_players[0]]
-        for player in self.all_players[1:]:
+        contenders = [self.players[0]]
+        for player in self.players[1:]:
             top_score = contenders[0].best_hand['score'].value
             player_score = player.best_hand['score'].value
             if player_score == top_score:
@@ -180,6 +175,9 @@ class Card:
     def __init__(self, suit, number):
         self._suit = suit
         self._number = number
+
+    def __repr__(self):
+        return self._suit.value + str(self._number)
     
     @property
     def suit(self):
