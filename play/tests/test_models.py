@@ -26,10 +26,17 @@ class SimulationTestCase(TestCase):
     
     @do_cprofile
     """
-    def test_simulation_with_user_starting_hand(self):
-        hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+    
+    """
+    TODO
+    Test that specified user hands are actually enforced with each test
+    """
+    
+    def test_simulation_with_user_and_multiple_other_starting_hand(self):
+        user_hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+        other_hands = [Card(suit=Suit.DIAMOND, number=13), Card(suit=Suit.CLUB, number=13), Card(suit=Suit.HEART, number=13), Card(suit=Suit.SPADE, number=14)]
         
-        simulation = Simulation(user_hand=hand)
+        simulation = Simulation(user_hand=user_hand, additional_players=2, additional_hands=[other_hands])
         
         results = simulation.run_simulation()
         print(results)
@@ -47,6 +54,54 @@ class SimulationTestCase(TestCase):
         self.assertEqual(wins, results['wins'])
         self.assertEqual(ties, results['ties'])
         self.assertEqual(count, 1000)
+        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
+    
+    def test_simulation_with_user_and_other_starting_hand(self):
+        user_hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+        other_hand = [Card(suit=Suit.DIAMOND, number=13), Card(suit=Suit.CLUB, number=13)]
+        
+        simulation = Simulation(user_hand=user_hand, additional_hands=[other_hand])
+        
+        results = simulation.run_simulation()
+        print(results)
+        
+        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        
+        wins = 0
+        ties = 0
+        count = 0
+        for h in Hand:
+            wins += results[h]['wins']
+            ties += results[h]['ties']
+            count += results[h]['count']
+            
+        self.assertEqual(wins, results['wins'])
+        self.assertEqual(ties, results['ties'])
+        self.assertEqual(count, 1000)
+        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
+    
+    def test_simulation_with_user_starting_hand(self):
+        hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+        
+        simulation = Simulation(user_hand=hand)
+        
+        results = simulation.run_simulation()
+        #print(results)
+        
+        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        
+        wins = 0
+        ties = 0
+        count = 0
+        for h in Hand:
+            wins += results[h]['wins']
+            ties += results[h]['ties']
+            count += results[h]['count']
+            
+        self.assertEqual(wins, results['wins'])
+        self.assertEqual(ties, results['ties'])
+        self.assertEqual(count, 1000)
+        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
     
     def test_simulation_returns_coherent_results(self):
         simulation = Simulation()
