@@ -26,11 +26,33 @@ class SimulationTestCase(TestCase):
     
     @do_cprofile
     """
-    def test_can_run_simulation(self):
+    def test_simulation_with_user_starting_hand(self):
+        hand = [Card(suit=Suit.DIAMOND, number=14), Card(suit=Suit.CLUB, number=14)]
+        
+        simulation = Simulation(user_hand=hand)
+        
+        results = simulation.run_simulation()
+        print(results)
+        
+        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        
+        wins = 0
+        ties = 0
+        count = 0
+        for h in Hand:
+            wins += results[h]['wins']
+            ties += results[h]['ties']
+            count += results[h]['count']
+            
+        self.assertEqual(wins, results['wins'])
+        self.assertEqual(ties, results['ties'])
+        self.assertEqual(count, 1000)
+    
+    def test_simulation_returns_coherent_results(self):
         simulation = Simulation()
         
         results = simulation.run_simulation()
-        
+        #print(results)
         self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
         
         wins = 0

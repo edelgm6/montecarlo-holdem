@@ -4,13 +4,16 @@ from play.rules import Suit, Hand, Stage
 from random import shuffle
 
 class Simulation:
-    def __init__(self, runs=1000, additional_players=1, **kwargs):
+    def __init__(self, runs=1000, additional_players=1, user_hand=[], *args):
         self.runs = runs
         self.user = Player(is_user=True)
+        self.user_hand = user_hand
         
-        self.players = [self.user]
+        self.other_players = []
         for player in range(additional_players):
-            self.players.append(Player())
+            self.other_players.append(Player())
+            
+        self.all_players = [self.user] + self.other_players
         
     def run_simulation(self):
         
@@ -23,7 +26,10 @@ class Simulation:
         
         
         for run in range(self.runs):
-            game = Game(self.players)
+            for player in self.all_players:
+                player.hand = []
+            
+            game = Game(other_players=self.other_players, user=self.user, user_hand=self.user_hand)
             game.deal()
             game.deal()
             game.deal()
@@ -37,11 +43,9 @@ class Simulation:
             if self.user in winners:
                 if len(winners) == 1:
                     results['wins'] +=1
-                    #user_win_count += 1
                     user_results['wins'] += 1
                 else:
                     results['ties'] += 1
-                    #user_tie_count += 1
                     user_results['ties'] += 1
             else:
                 results['losses'] += 1
@@ -49,21 +53,44 @@ class Simulation:
         return results
                      
 class Game:
-    def __init__(self, players):
+    def __init__(self, other_players, user, user_hand):
         self.deck = Deck()
         self.stage = Stage.PREDEAL
-        self.players = players
+        self.user = user
+        self.user_hand = user_hand
+        self.other_players = other_players
+        self.all_players = [user] + self.other_players
         self.community = []
-        
-        for player in self.players:
-            player.hand = []
             
     def deal(self):
         if self.stage == Stage.PREDEAL:
-            for round in range(2):
-                for player in self.players:
-                    card = self.deck.cards.pop()
-                    player.hand.append(card)
+            if self.user_hand:
+                user_cards = []
+                for card in self.deck.cards:
+                    if (card.suit == self.user_hand[0].suit and card.number == self.user_hand[0].number) or (card.suit == self.user_hand[1].suit and card.number == self.user_hand[1].number):
+                        user_cards.append(card)
+                        if len(user_cards) == 2:
+                            break
+                    
+                self.user.hand.append(user_cards[0])
+                self.user.hand.append(user_cards[1])
+                self.deck.cards.remove(user_cards[0])
+                self.deck.cards.remove(user_cards[1])
+                if len(self.user.hand) == 1:
+                    print(self.user.hand[0].suit)
+                    print(self.user.hand[0].number)
+                    print(len(self.deck.cards))
+                
+                #print(len(self.user.hand))
+                for round in range(2):
+                    for player in self.other_players:
+                        card = self.deck.cards.pop()
+                        player.hand.append(card)
+            else:
+                for round in range(2):
+                    for player in self.all_players:
+                        card = self.deck.cards.pop()
+                        player.hand.append(card)            
                     
             self.stage = Stage.PREFLOP
         
@@ -86,13 +113,13 @@ class Game:
     
     #Get rid of this and fold into the get_winning_player method
     def set_player_hands(self):
-        for player in self.players:
+        for player in self.all_players:
             player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
             
     def get_winning_player(self):
         
-        contenders = [self.players[0]]
-        for player in self.players[1:]:
+        contenders = [self.all_players[0]]
+        for player in self.all_players[1:]:
             top_score = contenders[0].best_hand['score'].value
             player_score = player.best_hand['score'].value
             if player_score == top_score:
@@ -144,8 +171,8 @@ class Game:
         return top_players
             
 class Player:
-    def __init__(self, is_user=False):
-        self.hand = []
+    def __init__(self, is_user=False, starting_hand=[]):
+        self.hand = starting_hand
         self.is_user = is_user
                
 class Deck:
