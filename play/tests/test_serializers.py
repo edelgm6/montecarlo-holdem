@@ -4,8 +4,27 @@ from play.serializers import SimulationSerializer
 from play.handsorter import HandSorter
 
 class SimulationSerializerTestCase(TestCase):
-    
-    def test_serializer_creates_simulation(self):
+ 
+    def test_serializer_creates_simulation_without_starter_hands(self):
+
+        data = {
+            'runs': 1000,
+            'user_hand': [],
+            'additional_players': 2,
+            'additional_hands': []   
+        }
+
+
+        serializer = SimulationSerializer(data=data)
+        if serializer.is_valid():
+            simulation = serializer.save()
+            results = simulation.run_simulation()
+            
+        self.assertTrue(serializer.is_valid())
+        
+        self.assertEqual(simulation.runs, 1000)
+
+    def test_serializer_creates_simulation_with_starter_hands(self):
 
         data = {
             'runs': 1000,

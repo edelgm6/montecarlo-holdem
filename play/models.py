@@ -9,8 +9,13 @@ class Simulation:
         self.user = Player(is_user=True, starting_hand=user_hand)
         
         self.other_players = []
-        for player, hand in zip(range(additional_players), additional_hands):
-            self.other_players.append(Player(starting_hand=hand))
+        for i in range(additional_players):
+            try:
+                starting_hand = additional_hands[i]
+            except IndexError:
+                starting_hand = []
+                
+            self.other_players.append(Player(starting_hand=starting_hand))
             
         self.all_players = [self.user] + self.other_players
         
@@ -62,6 +67,8 @@ class Game:
         if self.stage == Stage.PREDEAL:
             players_with_starting_hands = [player for player in self.players if player.starting_hand]
             players_without_starting_hands = [player for player in self.players if not player.starting_hand]
+            
+            #print(players_without_starting_hands)
             
             for player in players_with_starting_hands:
                 starting_hand = player.starting_hand
