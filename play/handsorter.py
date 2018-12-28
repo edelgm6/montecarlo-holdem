@@ -1,4 +1,5 @@
 from play.rules import Stage, Suit, Hand
+from operator import attrgetter
 
 class HandSorter:
     
@@ -11,43 +12,24 @@ class HandSorter:
     
     @staticmethod
     def get_hand_numbers(hand):
-        numbers = []
-        for card in hand:
-            numbers.append(card.number)
-            
+        
+        numbers = [card.number for card in hand]
+
         return numbers
     
     @staticmethod
     def sort_cards(hand):
-        n = len(hand) 
-  
-        # Traverse through all array elements 
-        for i in range(n): 
-
-            # Last i elements are already in place 
-            for j in range(0, n-i-1): 
-
-                # Traverse the array from 0 to n-i-1 
-                # Swap if the element found is greater 
-                # than the next element 
-                if hand[j].number < hand[j+1].number : 
-                    hand[j], hand[j+1] = hand[j+1], hand[j]
         
+        hand.sort(key=attrgetter('number'), reverse=True)
+
         return hand
     
     """
     TODO:
-    Remove now redundant additional sorting in other is_xxx methods
-    (it's covered now by the sort_cards called at the top of
-    get_best_hand)
+    Figure out if there's a way to run the HandSorter up front just once instead of repeating throughout
     """
     
     def get_best_hand(hand):
-        hand = HandSorter.sort_cards(hand)
-        
-        is_hand = HandSorter.is_straight_flush(hand)
-        if is_hand:
-            return is_hand
         
         is_hand = HandSorter.is_four_of_a_kind(hand)
         if is_hand:
@@ -57,9 +39,13 @@ class HandSorter:
         if is_hand:
             return is_hand
         
-        is_hand = HandSorter.is_flush(hand)
-        if is_hand:
-            return is_hand
+        is_flush = HandSorter.is_flush(hand)
+        if is_flush:
+            is_straight_flush = HandSorter.is_straight_flush(hand)
+            if is_straight_flush:
+                return is_straight_flush
+            else:
+                return is_flush
         
         is_hand = HandSorter.is_straight(hand)
         if is_hand:
@@ -85,6 +71,7 @@ class HandSorter:
     Test all methods for robustness of getting fewer than 7 cards/fewer than 5 cards"""
     @staticmethod
     def is_straight_flush(hand):
+        
         is_flush = HandSorter.is_flush(hand)
         if not is_flush:
             return False
@@ -95,8 +82,9 @@ class HandSorter:
         for card in hand:
             if card.suit == flush_suit:
                 single_suit_cards.append(card)
-                
+         
         ordered_hand = HandSorter.sort_cards(single_suit_cards)
+        
         test_hands = []
         for i in range(0,len(ordered_hand) - 4):
             test_hands.append(ordered_hand[i:i+5])
@@ -112,18 +100,14 @@ class HandSorter:
     
     @staticmethod
     def is_flush(hand):
-        suits = []
-        for card in hand:
-            suits.append(card.suit)
+
+        suits = [card.suit for card in hand]
 
         for suit in [s for s in Suit]:
             if suits.count(suit) >= 5:
                 flush_suit = suit
                 
-                flush_hand = []
-                for card in hand:
-                    if card.suit == flush_suit:
-                        flush_hand.append(card)
+                flush_hand = [card for card in hand if card.suit == flush_suit]
                         
                 ordered_flush_hand = HandSorter.sort_cards(flush_hand)
                 return {'score': Hand.FLUSH, 'hand': ordered_flush_hand[:5]}
@@ -146,18 +130,15 @@ class HandSorter:
         
         if not high_straight_card:
             return False
-            
+        
         cards_to_eval = ordered_hand[ordered_hand.index(high_straight_card):]
         straight_hand = [cards_to_eval[0]]
         for card in cards_to_eval[1:]:
-            hand_length = len(straight_hand)
-            if hand_length == 5:
-                break
             
-            if card.number < straight_hand[hand_length - 1].number:
+            if card.number < straight_hand[len(straight_hand) - 1].number:
                 straight_hand.append(card)
                 
-        return {'score': Hand.STRAIGHT, 'hand': straight_hand}
+        return {'score': Hand.STRAIGHT, 'hand': straight_hand[:5]}
             
     
     @staticmethod

@@ -4,8 +4,9 @@ from play.models import Game, Deck, Card, Stage, Suit, Hand, Player
 class HighCardBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_high_card(self):
-
-        game = Game(additional_players=1)
+        
+        players = [Player(), Player()]
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 14))
         game.community.append(Card(suit=Suit.DIAMOND, number = 13))
@@ -34,7 +35,8 @@ class HighCardBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 14))
         game.community.append(Card(suit=Suit.DIAMOND, number = 13))
@@ -66,7 +68,8 @@ class FullHouseBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_full_house(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -95,7 +98,8 @@ class FullHouseBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -126,7 +130,8 @@ class TwoPairBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -155,7 +160,8 @@ class TwoPairBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -187,7 +193,8 @@ class PairBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -216,7 +223,8 @@ class PairBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_pair(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -248,7 +256,8 @@ class ThreeBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_three(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -277,7 +286,8 @@ class ThreeBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_three(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -308,7 +318,8 @@ class FourBreakerTestCase(TestCase):
 
     def test_returns_winner_for_tied_four(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -337,7 +348,8 @@ class FourBreakerTestCase(TestCase):
     
     def test_returns_winners_for_tied_four(self):
 
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 12))
         game.community.append(Card(suit=Suit.DIAMOND, number = 12))
@@ -369,7 +381,8 @@ class StraightFlushBreakerTestCase(TestCase):
 
     def test_returns_winner_for_straight_flush(self):
         
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 10))
         game.community.append(Card(suit=Suit.CLUB, number = 11))
@@ -400,7 +413,8 @@ class StraightFlushBreakerTestCase(TestCase):
     
     def test_returns_tie_for_straights(self):
         
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 10))
         game.community.append(Card(suit=Suit.CLUB, number = 11))
@@ -432,7 +446,8 @@ class StraightBreakerTestCase(TestCase):
 
     def test_returns_winner_for_straights(self):
         
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 9))
         game.community.append(Card(suit=Suit.CLUB, number = 10))
@@ -463,7 +478,8 @@ class StraightBreakerTestCase(TestCase):
     
     def test_returns_tie_for_straights(self):
         
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 9))
         game.community.append(Card(suit=Suit.CLUB, number = 10))
@@ -496,7 +512,8 @@ class FlushBreakerTestCase(TestCase):
     
     def test_returns_tie_for_flushes(self):
         
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 8))
         game.community.append(Card(suit=Suit.CLUB, number = 14))
@@ -531,7 +548,8 @@ class FlushBreakerTestCase(TestCase):
         
     def test_flush_breaker_returns_single_player(self):
         
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.community.append(Card(suit=Suit.CLUB, number = 8))
         game.community.append(Card(suit=Suit.CLUB, number = 14))

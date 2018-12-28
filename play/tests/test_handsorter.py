@@ -199,10 +199,6 @@ class HandSorterTestCase(TestCase):
         
         is_three_of_a_kind = HandSorter.is_three_of_a_kind(hand)
         
-        for card in is_three_of_a_kind['hand']:
-            print(card.suit)
-            print(card.number)
-        
         self.assertEqual(is_three_of_a_kind['score'], Hand.THREE_OF_A_KIND)
         self.assertEqual(is_three_of_a_kind['hand'][0].number, 3)
         self.assertEqual(is_three_of_a_kind['hand'][1].number, 3)

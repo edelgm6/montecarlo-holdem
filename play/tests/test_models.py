@@ -1,10 +1,40 @@
 from django.test import TestCase
-from play.models import Game, Deck, Card, Stage, Suit
+from play.models import Game, Deck, Card, Stage, Suit, Player, Simulation
 from play.rules import Hand
+import cProfile
+
+class SimulationTestCase(TestCase):
+    
+    def do_cprofile(func):
+        def profiled_func(*args, **kwargs):
+            profile = cProfile.Profile()
+            try:
+                profile.enable()
+                result = func(*args, **kwargs)
+                profile.disable()
+                return result
+            finally:
+                profile.print_stats()
+        return profiled_func
+    
+    def test_can_create_simulation(self):
+        simulation = Simulation()
+        
+        self.assertEqual(simulation.runs, 100)
+        self.assertTrue(simulation.user.is_user)
+    
+    @do_cprofile
+    def test_can_run_simulation(self):
+        simulation = Simulation()
+        
+        user_win_count, user_tie_count = simulation.run_simulation()
+        
+
 
 class PlayerTestCase(TestCase):
     def test_can_create_player(self):
-        game = Game()
+        players = [Player(), Player()]         
+        game = Game(players)
         game.deal()
         game.deal()
         game.deal()
@@ -15,7 +45,8 @@ class PlayerTestCase(TestCase):
         self.assertEqual(len(player.hand), 2)
         
     def test_set_player_best_hands(self):
-        game = Game()
+        players = [Player(), Player()]         
+        game = Game(players)
         game.deal()
         game.deal()
         game.deal()
@@ -40,13 +71,15 @@ class DeckTestCase(TestCase):
         
 class GameTestCase(TestCase):
     def test_game_creates_deck(self):
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         self.assertTrue(game.deck)
         self.assertEqual(len(game.deck.cards), 52)
         
     def test_get_winning_player_returns_player1(self):
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         #community cards
         game.community.append(Card(suit=Suit.CLUB, number=2))
@@ -73,7 +106,8 @@ class GameTestCase(TestCase):
         self.assertEqual(player2.best_hand['score'], Hand.THREE_OF_A_KIND)
         
     def test_get_winning_player_returns_player1_with_tie(self):
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         #community cards
         game.community.append(Card(suit=Suit.CLUB, number=2))
@@ -102,7 +136,8 @@ class GameTestCase(TestCase):
         self.assertEqual(player1.best_hand['hand'][0].number, 9)
         
     def test_get_winning_player_returns_both_players_with_true_tie(self):
-        game = Game(additional_players=1)
+        players = [Player(), Player()]         
+        game = Game(players)
         
         #community cards
         game.community.append(Card(suit=Suit.CLUB, number=2))
@@ -129,7 +164,8 @@ class GameTestCase(TestCase):
 
     
     def test_preflop_deal_gives_each_player_2_cards(self):
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.deal()
         
@@ -140,7 +176,8 @@ class GameTestCase(TestCase):
         self.assertEqual(game.stage, Stage.PREFLOP)
         
     def test_flop_deal_puts_3_cards_in_community(self):
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.deal()
         game.deal()
@@ -153,7 +190,8 @@ class GameTestCase(TestCase):
         self.assertEqual(game.stage, Stage.FLOP)
         
     def test_turn_deal_puts_1_card_in_community(self):
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.deal()
         game.deal()
@@ -167,7 +205,8 @@ class GameTestCase(TestCase):
         self.assertEqual(game.stage, Stage.TURN)
         
     def test_river_deal_puts_1_card_in_community(self):
-        game = Game(additional_players=2)
+        players = [Player(), Player(), Player()]         
+        game = Game(players)
         
         game.deal()
         game.deal()

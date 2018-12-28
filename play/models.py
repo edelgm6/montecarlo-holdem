@@ -2,26 +2,55 @@ from django.db import models
 from play.handsorter import HandSorter
 from play.rules import Suit, Hand, Stage
 from random import shuffle
-from operator import itemgetter
 
 class Simulation:
     def __init__(self, runs=1000, additional_players=1, **kwargs):
         self.runs = runs
-        self.game = (Game(additional_players=additional_players))
-        """Create players here and pass the list into Game"""
+        self.user = Player(is_user=True)
+        
+        self.players = [self.user]
+        for player in range(additional_players):
+            self.players.append(Player())
+        
+    def run_simulation(self):
+        
+        user_win_count = 0
+        user_tie_count = 0
+        
+        for run in range(self.runs):
+            game = Game(self.players)
+            game.deal()
+            game.deal()
+            game.deal()
+            game.deal()
+            game.set_player_hands()
+            
+            winners = game.get_winning_player()
+            
+            if self.user in winners:
+                if len(winners) == 1:
+                    user_win_count = user_win_count + 1
+                else:
+                    user_tie_count = user_tie_count + 1
+             
+            del game
+        
+        print(user_win_count)
+        print(user_tie_count)
+        
+        return user_win_count, user_tie_count
+                
         
         
 class Game:
-    def __init__(self, additional_players=1):
+    def __init__(self, players):
         self.deck = Deck()
         self.stage = Stage.PREDEAL
-        self.players = []
+        self.players = players
         self.community = []
         
-        self.players.append(Player(is_user=True))
-        
-        for player in range(additional_players):
-            self.players.append(Player())
+        for player in self.players:
+            player.hand = []
             
     def deal(self):
         if self.stage == Stage.PREDEAL:
