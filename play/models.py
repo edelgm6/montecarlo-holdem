@@ -14,8 +14,13 @@ class Simulation:
         
     def run_simulation(self):
         
-        user_win_count = 0
-        user_tie_count = 0
+        results = {}
+        for h in Hand:
+            results[h] = {'count': 0, 'wins': 0, 'ties': 0}
+        results['wins'] = 0
+        results['ties'] = 0
+        results['losses'] = 0
+        
         
         for run in range(self.runs):
             game = Game(self.players)
@@ -26,22 +31,23 @@ class Simulation:
             game.set_player_hands()
             
             winners = game.get_winning_player()
+            user_results = results[self.user.best_hand['score']]
+            user_results['count'] += 1
             
             if self.user in winners:
                 if len(winners) == 1:
-                    user_win_count = user_win_count + 1
+                    results['wins'] +=1
+                    #user_win_count += 1
+                    user_results['wins'] += 1
                 else:
-                    user_tie_count = user_tie_count + 1
-             
-            del game
+                    results['ties'] += 1
+                    #user_tie_count += 1
+                    user_results['ties'] += 1
+            else:
+                results['losses'] += 1
         
-        print(user_win_count)
-        print(user_tie_count)
-        
-        return user_win_count, user_tie_count
-                
-        
-        
+        return results
+                     
 class Game:
     def __init__(self, players):
         self.deck = Deck()
@@ -146,13 +152,8 @@ class Deck:
     def __init__(self):
         suits = [s for s in Suit]
         numbers = [2,3,4,5,6,7,8,9,10,11,12,13,14]
-        self.cards = []
-        
-        for suit in suits:
-            for number in numbers:
-                card = Card(suit=suit, number=number)
-                self.cards.append(card)
-        
+        self.cards = [Card(suit=suit, number=number) for suit in suits for number in numbers]
+            
         shuffle(self.cards)
         
 class Card:

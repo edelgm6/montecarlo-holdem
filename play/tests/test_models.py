@@ -5,6 +5,7 @@ import cProfile
 
 class SimulationTestCase(TestCase):
     
+    """
     def do_cprofile(func):
         def profiled_func(*args, **kwargs):
             profile = cProfile.Profile()
@@ -20,16 +21,29 @@ class SimulationTestCase(TestCase):
     def test_can_create_simulation(self):
         simulation = Simulation()
         
-        self.assertEqual(simulation.runs, 100)
+        self.assertEqual(simulation.runs, 1000)
         self.assertTrue(simulation.user.is_user)
     
     @do_cprofile
+    """
     def test_can_run_simulation(self):
         simulation = Simulation()
         
-        user_win_count, user_tie_count = simulation.run_simulation()
+        results = simulation.run_simulation()
         
-
+        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        
+        wins = 0
+        ties = 0
+        count = 0
+        for h in Hand:
+            wins += results[h]['wins']
+            ties += results[h]['ties']
+            count += results[h]['count']
+            
+        self.assertEqual(wins, results['wins'])
+        self.assertEqual(ties, results['ties'])
+        self.assertEqual(count, 1000)
 
 class PlayerTestCase(TestCase):
     def test_can_create_player(self):

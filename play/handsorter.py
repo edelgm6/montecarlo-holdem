@@ -78,11 +78,8 @@ class HandSorter:
         
         flush_suit = is_flush['hand'][0].suit
         
-        single_suit_cards = []
-        for card in hand:
-            if card.suit == flush_suit:
-                single_suit_cards.append(card)
-         
+        single_suit_cards = [card for card in hand if card.suit == flush_suit]
+
         ordered_hand = HandSorter.sort_cards(single_suit_cards)
         
         test_hands = []
