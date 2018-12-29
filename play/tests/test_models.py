@@ -39,26 +39,27 @@ class SimulationTestCase(TestCase):
         
         simulation = Simulation(user_hand=user_hand, additional_players=2, additional_hands=other_hands)
         
-        results = simulation.run_simulation()
+        simulation.run_simulation()
+        results = simulation.results
         print(results)
         
-        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        self.assertEqual(simulation.wins + simulation.losses + simulation.ties, 1000)
         
         wins = 0
         ties = 0
         count = 0
         for h in Hand:
-            wins += results[h]['wins']
-            ties += results[h]['ties']
-            count += results[h]['count']
+            wins += results[str(h)]['wins']
+            ties += results[str(h)]['ties']
+            count += results[str(h)]['count']
             
-        self.assertEqual(wins, results['wins'])
-        self.assertEqual(ties, results['ties'])
+        self.assertEqual(wins, simulation.wins)
+        self.assertEqual(ties, simulation.ties)
         self.assertEqual(count, 1000)
-        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
-        self.assertFalse(results['ties'] == 0)
-        self.assertFalse(results['wins'] == 0)
-        self.assertFalse(results['losses'] == 0)
+        self.assertEqual(results[str(Hand.HIGH_CARD)]['count'], 0)
+        self.assertFalse(simulation.ties == 0)
+        self.assertFalse(simulation.wins == 0)
+        self.assertFalse(simulation.losses == 0)
     
     def test_simulation_with_user_and_other_starting_hand(self):
         user_hand = ['D14', 'C14']
@@ -66,74 +67,76 @@ class SimulationTestCase(TestCase):
         
         simulation = Simulation(user_hand=user_hand, additional_hands=other_hands)
         
-        results = simulation.run_simulation()
+        simulation.run_simulation()
+        results = simulation.results
         print(results)
         
-        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        self.assertEqual(simulation.wins + simulation.losses + simulation.ties, 1000)
         
         wins = 0
         ties = 0
         count = 0
         for h in Hand:
-            wins += results[h]['wins']
-            ties += results[h]['ties']
-            count += results[h]['count']
+            wins += results[str(h)]['wins']
+            ties += results[str(h)]['ties']
+            count += results[str(h)]['count']
             
-        self.assertEqual(wins, results['wins'])
-        self.assertEqual(ties, results['ties'])
+        self.assertEqual(wins, simulation.wins)
+        self.assertEqual(ties, simulation.ties)
         self.assertEqual(count, 1000)
-        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
-        self.assertFalse(results['ties'] == 0)
-        self.assertFalse(results['wins'] == 0)
-        self.assertFalse(results['losses'] == 0)
+        self.assertEqual(results[str(Hand.HIGH_CARD)]['count'], 0)
+        self.assertFalse(simulation.ties == 0)
+        self.assertFalse(simulation.wins == 0)
+        self.assertFalse(simulation.losses == 0)
     
     def test_simulation_with_user_starting_hand(self):
         hand = ['D14', 'C14']
         
         simulation = Simulation(user_hand=hand)
         
-        results = simulation.run_simulation()
-        #print(results)
+        simulation.run_simulation()
+        results = simulation.results
         
-        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        self.assertEqual(simulation.wins + simulation.losses + simulation.ties, 1000)
         
         wins = 0
         ties = 0
         count = 0
         for h in Hand:
-            wins += results[h]['wins']
-            ties += results[h]['ties']
-            count += results[h]['count']
+            wins += results[str(h)]['wins']
+            ties += results[str(h)]['ties']
+            count += results[str(h)]['count']
             
-        self.assertEqual(wins, results['wins'])
-        self.assertEqual(ties, results['ties'])
+        self.assertEqual(wins, simulation.wins)
+        self.assertEqual(ties, simulation.ties)
         self.assertEqual(count, 1000)
-        self.assertEqual(results[Hand.HIGH_CARD]['count'], 0)
-        self.assertFalse(results['ties'] == 0)
-        self.assertFalse(results['wins'] == 0)
-        self.assertFalse(results['losses'] == 0)
+        self.assertEqual(results[str(Hand.HIGH_CARD)]['count'], 0)
+        self.assertFalse(simulation.ties == 0)
+        self.assertFalse(simulation.wins == 0)
+        self.assertFalse(simulation.losses == 0)
     
     def test_simulation_returns_coherent_results(self):
         simulation = Simulation()
         
-        results = simulation.run_simulation()
+        simulation.run_simulation()
+        results = simulation.results
         #print(results)
-        self.assertEqual(results['wins'] + results['losses'] + results['ties'], 1000)
+        self.assertEqual(simulation.wins + simulation.losses + simulation.ties, 1000)
         
         wins = 0
         ties = 0
         count = 0
         for h in Hand:
-            wins += results[h]['wins']
-            ties += results[h]['ties']
-            count += results[h]['count']
+            wins += results[str(h)]['wins']
+            ties += results[str(h)]['ties']
+            count += results[str(h)]['count']
             
-        self.assertEqual(wins, results['wins'])
-        self.assertEqual(ties, results['ties'])
+        self.assertEqual(wins, simulation.wins)
+        self.assertEqual(ties, simulation.ties)
         self.assertEqual(count, 1000)
-        self.assertFalse(results['ties'] == 0)
-        self.assertFalse(results['wins'] == 0)
-        self.assertFalse(results['losses'] == 0)
+        self.assertFalse(simulation.ties == 0)
+        self.assertFalse(simulation.wins == 0)
+        self.assertFalse(simulation.losses == 0)
 
 class PlayerTestCase(TestCase):
     def test_can_create_player(self):

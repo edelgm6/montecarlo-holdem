@@ -4,9 +4,18 @@ from play.rules import Suit, Hand, Stage
 from random import shuffle
 
 class Simulation:
-    def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[None]):
+    def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[]):
         self.runs = runs
+        self.user_hand = user_hand
+        self.additional_players = additional_players
+        self.additional_hands = additional_hands
+        
+        
         self.user = Player(is_user=True, starting_hand=user_hand)
+        self.results = self.generate_results_dict()
+        self.wins = 0
+        self.losses = 0
+        self.ties = 0
         
         self.other_players = []
         for i in range(additional_players):
@@ -19,15 +28,16 @@ class Simulation:
             
         self.all_players = [self.user] + self.other_players
         
-    def run_simulation(self):
-        
+    def generate_results_dict(self):
+
         results = {}
-        for h in Hand:
-            results[h] = {'count': 0, 'wins': 0, 'ties': 0}
-        results['wins'] = 0
-        results['ties'] = 0
-        results['losses'] = 0
         
+        for h in Hand:
+            results[str(h)] = {'count': 0, 'wins': 0, 'ties': 0}
+        
+        return results
+        
+    def run_simulation(self):
         
         for run in range(self.runs):
             for player in self.all_players:
@@ -41,20 +51,18 @@ class Simulation:
             game.set_player_hands()
             
             winners = game.get_winning_player()
-            hand_results = results[self.user.best_hand['score']]
+            hand_results = self.results[str(self.user.best_hand['score'])]
             hand_results['count'] += 1
             
             if self.user in winners:
                 if len(winners) == 1:
-                    results['wins'] +=1
+                    self.wins +=1
                     hand_results['wins'] += 1
                 else:
-                    results['ties'] += 1
+                    self.ties += 1
                     hand_results['ties'] += 1
             else:
-                results['losses'] += 1
-        
-        return results
+                self.losses += 1
                      
 class Game:
     def __init__(self, players):
@@ -67,8 +75,6 @@ class Game:
         if self.stage == Stage.PREDEAL:
             players_with_starting_hands = [player for player in self.players if player.starting_hand]
             players_without_starting_hands = [player for player in self.players if not player.starting_hand]
-            
-            #print(players_without_starting_hands)
             
             for player in players_with_starting_hands:
                 starting_hand = player.starting_hand

@@ -23,3 +23,6 @@ class Hand(Enum):
     TWO_PAIR = 7
     PAIR = 8
     HIGH_CARD = 9
+    
+    def __str__(self):
+        return self.name.lower()
