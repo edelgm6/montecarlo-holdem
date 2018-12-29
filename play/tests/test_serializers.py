@@ -1,27 +1,6 @@
 from django.test import TestCase
-from play.models import Game, Deck, Card, Stage, Suit, Hand, Simulation
+from play.models import Simulation
 from play.serializers import SimulationSerializer
-from play.handsorter import HandSorter
-
-"""
-class ResultsSerializerTestCase(TestCase):
-    
-    def test_serializer_returns_serialized_results_dict(self):
-
-        data = {
-            'runs': 1000,
-            'user_hand': [],
-            'additional_players': 2,
-            'additional_hands': [['D14', 'C14']]   
-        }
-
-        serializer = SimulationSerializer(data=data)
-        if serializer.is_valid():
-            simulation = serializer.save()
-            results = simulation.run_simulation()
-            
-        serializer = ResultsSerializer(data=data)
-"""
 
 class SimulationSerializerTestCase(TestCase):
  
@@ -52,7 +31,7 @@ class SimulationSerializerTestCase(TestCase):
         serializer = SimulationSerializer(data=data)
         if serializer.is_valid():
             simulation = serializer.save()
-            results = simulation.run_simulation()
+            simulation.run_simulation()
             
         self.assertTrue(serializer.is_valid())
         

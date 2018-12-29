@@ -6,7 +6,8 @@ class SimulationSerializer(serializers.Serializer):
     user_hand = serializers.ListField(
         child=serializers.CharField(max_length=3, min_length=2, allow_blank=True),
         min_length=0,
-        max_length=2
+        max_length=2,
+        required=False
     )
     
     additional_players = serializers.IntegerField(max_value=7, min_value=1)
@@ -15,7 +16,8 @@ class SimulationSerializer(serializers.Serializer):
         child=serializers.ListField(
             child=serializers.CharField(max_length=3, min_length=2, allow_blank=True),
             min_length=0, 
-            max_length=1000)
+            max_length=1000),
+        required=False
     )
     
     results = serializers.DictField(

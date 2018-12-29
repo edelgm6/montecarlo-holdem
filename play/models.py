@@ -33,7 +33,7 @@ class Simulation:
         results = {}
         
         for h in Hand:
-            results[str(h)] = {'count': 0, 'wins': 0, 'ties': 0}
+            results[str(h)] = {'count': 0, 'wins': 0, 'ties': 0, 'losses': 0}
         
         return results
         
@@ -63,6 +63,7 @@ class Simulation:
                     hand_results['ties'] += 1
             else:
                 self.losses += 1
+                hand_results['losses'] += 1
                      
 class Game:
     def __init__(self, players):
