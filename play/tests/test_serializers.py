@@ -7,7 +7,30 @@ class SimulationSerializerTestCase(TestCase):
     def test_successful_with_empty_cards(self):
 
         data = {
-            'runs': 1000,
+            'runs': 10,
+            'user_hand': ['', ''],
+            'additional_players': 2,
+            'additional_hands': [['', ''], ['H14', '']]   
+        }
+        
+            
+        serializer = SimulationSerializer(data=data)
+        valid = serializer.is_valid()
+        simulation = serializer.save()
+        self.assertTrue(valid)
+        self.assertEqual(simulation.user_hand, ['', ''])
+        self.assertEqual(simulation.additional_hands, [['', ''], ['H14', '']])
+        
+        simulation.run_simulation()
+        self.assertTrue('H14' in simulation.all_players[2].get_hand())
+        for player in simulation.all_players:
+            self.assertEqual(len(player.hand), 2)
+
+
+    def test_successful_with_single_cards(self):
+
+        data = {
+            'runs': 10,
             'user_hand': ['D14', ''],
             'additional_players': 2,
             'additional_hands': [['', 'C14'], ['H14', '']]   
@@ -17,11 +40,14 @@ class SimulationSerializerTestCase(TestCase):
         serializer = SimulationSerializer(data=data)
         valid = serializer.is_valid()
         simulation = serializer.save()
-        print(simulation.user_hand)
-        print(simulation.additional_hands)
         self.assertTrue(valid)
         self.assertEqual(simulation.user_hand, ['D14', ''])
         self.assertEqual(simulation.additional_hands, [['', 'C14'], ['H14', '']])
+        
+        simulation.run_simulation()
+        self.assertTrue('D14' in simulation.user.get_hand())
+        self.assertTrue('C14' in simulation.all_players[1].get_hand())
+        self.assertTrue('H14' in simulation.all_players[2].get_hand())
 
     def test_raises_error_if_duplicate_cards(self):
 
@@ -98,7 +124,6 @@ class SimulationSerializerTestCase(TestCase):
             'additional_players': 2,
             'additional_hands': [['D14', 'C14'], ['H5', 'H6']]   
         }
-
 
         serializer = SimulationSerializer(data=data)
         if serializer.is_valid():
