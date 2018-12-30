@@ -44,7 +44,7 @@ class SimulationSerializer(serializers.Serializer):
             for hand in data['additional_hands']:
                 all_starting_hands += hand
         
-        count_list = [card for card in all_starting_hands if all_starting_hands.count(card) > 1]
+        count_list = [card for card in all_starting_hands if all_starting_hands.count(card) > 1 and card]
         
         if count_list:
             duplicates = ' '.join(list(set(count_list)))

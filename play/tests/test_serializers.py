@@ -4,6 +4,25 @@ from play.serializers import SimulationSerializer
 
 class SimulationSerializerTestCase(TestCase):
  
+    def test_successful_with_empty_cards(self):
+
+        data = {
+            'runs': 1000,
+            'user_hand': ['D14', ''],
+            'additional_players': 2,
+            'additional_hands': [['', 'C14'], ['H14', '']]   
+        }
+        
+            
+        serializer = SimulationSerializer(data=data)
+        valid = serializer.is_valid()
+        simulation = serializer.save()
+        print(simulation.user_hand)
+        print(simulation.additional_hands)
+        self.assertTrue(valid)
+        self.assertEqual(simulation.user_hand, ['D14', ''])
+        self.assertEqual(simulation.additional_hands, [['', 'C14'], ['H14', '']])
+
     def test_raises_error_if_duplicate_cards(self):
 
         data = {
@@ -16,7 +35,6 @@ class SimulationSerializerTestCase(TestCase):
             
         serializer = SimulationSerializer(data=data)
         valid = serializer.is_valid()
-        
         self.assertFalse(valid)
 
     def test_can_serialize_run_simulation_results(self):
@@ -92,8 +110,8 @@ class SimulationSerializerTestCase(TestCase):
         self.assertEqual(simulation.runs, 1000)
         self.assertTrue(['D2', 'D4'] == simulation.user.starting_hand)
         
-        self.assertTrue(['D14', 'C14'] == simulation.other_players[0].starting_hand or ['D14', 'C14'] == simulation.other_players[1].starting_hand)
+        self.assertTrue(['D14', 'C14'] == simulation.all_players[1].starting_hand or ['D14', 'C14'] == simulation.all_players[2].starting_hand)
         
-        self.assertTrue(['H5', 'H6'] == simulation.other_players[0].starting_hand or ['H5', 'H6'] == simulation.other_players[1].starting_hand)
+        self.assertTrue(['H5', 'H6'] == simulation.all_players[1].starting_hand or ['H5', 'H6'] == simulation.all_players[2].starting_hand)
         
         self.assertEqual(len(simulation.all_players), 3)

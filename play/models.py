@@ -7,10 +7,10 @@ class Simulation:
     def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[]):
         self.runs = runs
         # Strip out '' values
-        self.user_hand = [card for card in user_hand if card]
+        #self.user_hand = [card for card in user_hand if card]
+        self.user_hand = user_hand
         self.additional_players = additional_players
         self.additional_hands = additional_hands
-        
         
         self.user = Player(is_user=True, starting_hand=self.user_hand)
         self.results = self.generate_results_dict()
@@ -18,21 +18,16 @@ class Simulation:
         self.losses = 0
         self.ties = 0
         
-        """
-        TODO
-        Update such that this can take only 1 card in a hand
-        """
-        
-        self.other_players = []
+        other_players = []
         for i in range(additional_players):
             try:
                 starting_hand = [card for card in additional_hands[i] if card]
             except IndexError:
                 starting_hand = []
                 
-            self.other_players.append(Player(starting_hand=starting_hand))
+            other_players.append(Player(starting_hand=starting_hand))
             
-        self.all_players = [self.user] + self.other_players
+        self.all_players = [self.user] + other_players
         
     def generate_results_dict(self):
 
