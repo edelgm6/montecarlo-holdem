@@ -24,12 +24,10 @@ class HandSorter:
 
         return hand
     
-    """
-    TODO:
-    Figure out if there's a way to run the HandSorter up front just once instead of repeating throughout
-    """
-    
     def get_best_hand(hand):
+        is_straight_flush = HandSorter.is_straight_flush(hand)
+        if is_straight_flush:
+            return is_straight_flush
         
         is_hand = HandSorter.is_four_of_a_kind(hand)
         if is_hand:
@@ -41,11 +39,7 @@ class HandSorter:
         
         is_flush = HandSorter.is_flush(hand)
         if is_flush:
-            is_straight_flush = HandSorter.is_straight_flush(hand)
-            if is_straight_flush:
-                return is_straight_flush
-            else:
-                return is_flush
+            return is_flush
         
         is_hand = HandSorter.is_straight(hand)
         if is_hand:
@@ -68,7 +62,8 @@ class HandSorter:
     
     """
     TODO
-    Test all methods for robustness of getting fewer than 7 cards/fewer than 5 cards"""
+    Test all methods for robustness of getting fewer than 7 cards/fewer than 5 cards
+    """
     @staticmethod
     def is_straight_flush(hand):
         
@@ -215,12 +210,6 @@ class HandSorter:
             
         return {'score': Hand.PAIR, 'hand': pair}
     
-    
-    """
-    TODO
-    Refactor to call some method that grabs the high pair from a deck
-    and returns that high pair?
-    """
     @staticmethod
     def is_two_pair(hand):
         high_pair_hand = HandSorter.is_pair(hand)

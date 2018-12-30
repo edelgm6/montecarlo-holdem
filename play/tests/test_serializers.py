@@ -18,7 +18,6 @@ class SimulationSerializerTestCase(TestCase):
         valid = serializer.is_valid()
         
         self.assertFalse(valid)
-        print(serializer.errors)
 
     def test_can_serialize_run_simulation_results(self):
 
@@ -32,7 +31,6 @@ class SimulationSerializerTestCase(TestCase):
         simulation.run_simulation()
             
         serializer = SimulationSerializer(simulation)
-        print(serializer.data)
     
     
     def test_serializer_creates_simulation_with_single_starter_hand(self):

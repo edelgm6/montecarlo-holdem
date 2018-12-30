@@ -6,21 +6,27 @@ from random import shuffle
 class Simulation:
     def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[]):
         self.runs = runs
-        self.user_hand = user_hand
+        # Strip out '' values
+        self.user_hand = [card for card in user_hand if card]
         self.additional_players = additional_players
         self.additional_hands = additional_hands
         
         
-        self.user = Player(is_user=True, starting_hand=user_hand)
+        self.user = Player(is_user=True, starting_hand=self.user_hand)
         self.results = self.generate_results_dict()
         self.wins = 0
         self.losses = 0
         self.ties = 0
         
+        """
+        TODO
+        Update such that this can take only 1 card in a hand
+        """
+        
         self.other_players = []
         for i in range(additional_players):
             try:
-                starting_hand = additional_hands[i]
+                starting_hand = [card for card in additional_hands[i] if card]
             except IndexError:
                 starting_hand = []
                 
@@ -74,25 +80,31 @@ class Game:
             
     def deal(self):
         if self.stage == Stage.PREDEAL:
+            
             players_with_starting_hands = [player for player in self.players if player.starting_hand]
-            players_without_starting_hands = [player for player in self.players if not player.starting_hand]
             
             for player in players_with_starting_hands:
                 starting_hand = player.starting_hand
                 for card in self.deck.cards:
-                    if repr(card) == starting_hand[0] or repr(card) == starting_hand[1]:
-                        player.hand.append(card)
-                        if len(player.hand) == 2:
-                            break
-                            
-                self.deck.cards.remove(player.hand[0])
-                self.deck.cards.remove(player.hand[1])
+                    if repr(card) in starting_hand:
+                        player.hand.append(card) 
+                        if len(player.hand) == len(starting_hand):
+                            break    
+            
+            current_hands = [player.hand for player in players_with_starting_hands]
+            for hand in current_hands:
+                for card in hand:
+                    self.deck.cards.remove(card)
                 
-            for round in range(2):
-                for player in players_without_starting_hands:
-                    card = self.deck.cards.pop()
-                    player.hand.append(card)         
-                    
+            players_with_remaining_hands = [player for player in self.players if len(player.hand) != 2]
+            for i in range(2):
+                for player in players_with_remaining_hands:
+                    if len(player.hand) == 2:
+                        continue
+                    else:
+                        card = self.deck.cards.pop()
+                        player.hand.append(card) 
+      
             self.stage = Stage.PREFLOP
         
         elif self.stage == Stage.PREFLOP:
@@ -176,6 +188,9 @@ class Player:
         self.hand = []
         self.starting_hand = starting_hand
         self.is_user = is_user
+        
+    def get_hand(self):
+        return [repr(self.hand[0]), repr(self.hand[1])]
                
 class Deck:
     def __init__(self):
