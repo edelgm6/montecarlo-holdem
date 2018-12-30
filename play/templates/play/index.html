@@ -10,18 +10,18 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>Montecarlo Holdem</title>
   </head>
   <body>
       
     <main role="main" class="container">
 
       <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-          
-        {% include "play/submit-form.html" %}
+        <h1>Montecarlo Poker Simulator</h1>
+        <p class="lead">Set the hands below (or set none at all!) to run a <i>montecarlo simulation</i> 
+          (i.e., play many games to impute the probabilities) of Texas Holdem.</p>
       </div>
+    {% include "play/submit-form.html" %}
         
     <canvas id="myChart"></canvas>
 
