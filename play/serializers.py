@@ -35,9 +35,14 @@ class SimulationSerializer(serializers.Serializer):
         return Simulation(**validated_data)
     
     def validate(self, data):
-        all_starting_hands = data['user_hand'].copy()
-        for hand in data['additional_hands']:
-            all_starting_hands += hand
+        
+        all_starting_hands = []
+        if data.get('user_hand'):
+            all_starting_hands = data['user_hand'].copy()
+
+        if data.get('additional_hands'):
+            for hand in data['additional_hands']:
+                all_starting_hands += hand
         
         count_list = [card for card in all_starting_hands if all_starting_hands.count(card) > 1]
         
