@@ -14,22 +14,19 @@ function buildHandsChart(wins, losses, ties) {
             datasets: [{
                 label: "wins",
                 stack: "wins",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: '#A6BFCC',
                 data: wins,
             },
             {
                 label: "losses",
                 stack: "losses",
-                backgroundColor: 'rgb(0, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: '#2A3948',
                 data: losses,
             },
             {
                 label: "ties",
                 stack: "ties",
-                backgroundColor: 'rgb(0, 0, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: '#32668F',
                 data: ties,
             }]
         },
@@ -38,10 +35,16 @@ function buildHandsChart(wins, losses, ties) {
         options: {
             scales: {
                 xAxes: [{
-                    stacked: true
+                    stacked: true,
+                    gridLines: {
+                        display: false
+                    }
                 }],
                 yAxes: [{
-                    stacked: true
+                    stacked: true,
+                    gridLines: {
+                        display: false
+                    }
                 }]
             }
         }

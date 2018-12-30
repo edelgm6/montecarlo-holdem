@@ -34,3 +34,16 @@ class SimulationSerializer(serializers.Serializer):
     def create(self, validated_data):
         return Simulation(**validated_data)
     
+    def validate(self, data):
+        all_starting_hands = data['user_hand'].copy()
+        for hand in data['additional_hands']:
+            all_starting_hands += hand
+        
+        count_list = [card for card in all_starting_hands if all_starting_hands.count(card) > 1]
+        
+        if count_list:
+            duplicates = ' '.join(list(set(count_list)))
+            raise serializers.ValidationError("Cannot submit same card more than once (" + duplicates + ")")
+        
+        return data
+    

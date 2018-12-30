@@ -18,8 +18,6 @@ class ResultsView(APIView):
         
         serializer = SimulationSerializer(data=request.data)
         
-        print(request.data)
-        
         if serializer.is_valid():
             simulation = serializer.save()
             simulation.run_simulation()

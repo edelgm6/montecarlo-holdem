@@ -4,6 +4,22 @@ from play.serializers import SimulationSerializer
 
 class SimulationSerializerTestCase(TestCase):
  
+    def test_raises_error_if_duplicate_cards(self):
+
+        data = {
+            'runs': 1000,
+            'user_hand': ['D14', 'H14'],
+            'additional_players': 2,
+            'additional_hands': [['D14', 'C14'], ['C14', 'D2']]   
+        }
+        
+            
+        serializer = SimulationSerializer(data=data)
+        valid = serializer.is_valid()
+        
+        self.assertFalse(valid)
+        print(serializer.errors)
+
     def test_can_serialize_run_simulation_results(self):
 
         simulation = Simulation(
