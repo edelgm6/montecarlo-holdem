@@ -82,28 +82,24 @@ class Game:
         if self.stage == Stage.PREDEAL:
             
             players_with_starting_hands = [player for player in self.players if player.starting_hand]
-            
             for player in players_with_starting_hands:
                 starting_hand = player.starting_hand
                 for card in self.deck.cards:
                     if repr(card) in starting_hand:
-                        player.hand.append(card) 
+                        player.hand.append(card)
                         if len(player.hand) == len(starting_hand):
                             break    
             
-            current_hands = [player.hand for player in players_with_starting_hands]
-            for hand in current_hands:
-                for card in hand:
+                for card in player.hand:
                     self.deck.cards.remove(card)
-                
-            players_with_remaining_hands = [player for player in self.players if len(player.hand) != 2]
+
             for i in range(2):
-                for player in players_with_remaining_hands:
-                    if len(player.hand) == 2:
-                        continue
-                    else:
+                for player in self.players:
+                    if len(player.hand) < 2:
                         card = self.deck.cards.pop()
                         player.hand.append(card) 
+                    else:
+                        continue
       
             self.stage = Stage.PREFLOP
         
