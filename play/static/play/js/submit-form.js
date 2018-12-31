@@ -70,9 +70,8 @@ $("#pokerForm").submit(function(event) {
 });
 
 function createHandsChart (wins, losses, ties) {
-        if (first_update) {
+        if (Object.keys(handsChart).length==0) {
             buildHandsChart(wins, losses, ties);
-            first_update = false;
         } else {
             console.log('come on now')
             handsChart['data']['datasets'][0]['data'] = wins;

@@ -82,7 +82,6 @@ class HandSorter:
             test_hands.append(ordered_hand[i:i+5])
         
         for hand in test_hands:
-
             is_straight = HandSorter.is_straight(hand)
         
             if is_straight:
@@ -126,7 +125,6 @@ class HandSorter:
         cards_to_eval = ordered_hand[ordered_hand.index(high_straight_card):]
         straight_hand = [cards_to_eval[0]]
         for card in cards_to_eval[1:]:
-            
             if card.number < straight_hand[len(straight_hand) - 1].number:
                 straight_hand.append(card)
                 
@@ -198,6 +196,7 @@ class HandSorter:
         
         pair = hand_with_cards
         
+        #Add high kickers onto hand
         sorted_hand = HandSorter.sort_cards(hand_without_cards)
         
         pair.append(sorted_hand[0])

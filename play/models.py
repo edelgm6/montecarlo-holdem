@@ -7,7 +7,6 @@ class Simulation:
     def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[]):
         self.runs = runs
         # Strip out '' values
-        #self.user_hand = [card for card in user_hand if card]
         self.user_hand = user_hand
         self.additional_players = additional_players
         self.additional_hands = additional_hands
@@ -78,13 +77,7 @@ class Game:
             
             players_with_starting_hands = [player for player in self.players if player.starting_hand]
             for player in players_with_starting_hands:
-                starting_hand = player.starting_hand
-                for card in self.deck.cards:
-                    if repr(card) in starting_hand:
-                        player.hand.append(card)
-                        if len(player.hand) == len(starting_hand):
-                            break    
-            
+                player.hand = [card for card in self.deck.cards if repr(card) in player.starting_hand]
                 for card in player.hand:
                     self.deck.cards.remove(card)
 
@@ -121,16 +114,9 @@ class Game:
             player.best_hand = HandSorter.get_best_hand(player.hand + self.community)
             
     def get_winning_player(self):
-        
-        contenders = [self.players[0]]
-        for player in self.players[1:]:
-            top_score = contenders[0].best_hand['score'].value
-            player_score = player.best_hand['score'].value
-            if player_score == top_score:
-                contenders.append(player)
-            elif player_score < top_score:
-                contenders = [player]
-          
+        top_score = min([player.best_hand['score'].value for player in self.players])
+        contenders = [player for player in self.players if player.best_hand['score'].value == top_score]
+
         if len(contenders) > 1:
             winners = self.break_tie(contenders)
         else:
