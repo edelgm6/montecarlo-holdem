@@ -423,6 +423,7 @@ class GameTestCase(TestCase):
         # Deck length is less the initial deal minus 3 community - 1 burn
         self.assertEqual(len(game.deck.cards), 52 - len(game.players) * 2 - 3 - 1 - 1 - 1)
         self.assertEqual(game.stage, Stage.TURN)
+        self.assertEqual(len(game.community), 4)
         
     def test_river_deal_puts_1_card_in_community(self):
         players = [Player(), Player(), Player()]         
@@ -439,3 +440,4 @@ class GameTestCase(TestCase):
         # Deck length is less the initial deal minus 3 community - 1 burn
         self.assertEqual(len(game.deck.cards), 52 - len(game.players) * 2 - 3 - 1 - 1 - 1 - 1 - 1)
         self.assertEqual(game.stage, Stage.RIVER)  
+        self.assertEqual(len(game.community), 5)

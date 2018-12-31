@@ -85,9 +85,7 @@ class Game:
                 for player in self.players:
                     if len(player.hand) < 2:
                         card = self.deck.cards.pop()
-                        player.hand.append(card) 
-                    else:
-                        continue
+                        player.hand.append(card)
       
             self.stage = Stage.PREFLOP
         
