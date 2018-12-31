@@ -1,4 +1,4 @@
-from play.rules import Stage, Suit, Hand
+from play.rules import Suit, Hand
 from operator import attrgetter
 
 class HandSorter:

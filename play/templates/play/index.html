@@ -21,10 +21,16 @@
         <p class="lead">Set the hands below (or set none at all!) to run a <i>montecarlo simulation</i> 
           (i.e., play many games to impute the probabilities) of Texas Holdem.</p>
       </div>
-    {% include "play/submit-form.html" %}
-        
+    
+    <div class="row">
+    <div class="col-md-3">
+      {% include "play/submit-form.html" %}      
+    </div>   
+    
+    <div class="col-md-9">    
     <canvas id="myChart"></canvas>
-
+    </div>
+    </div>
     </main><!-- /.container -->
 
     <!-- Optional JavaScript -->

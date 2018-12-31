@@ -1,15 +1,19 @@
+
 <form id="pokerForm" method="post" action="results/" novalidate>
-<div class="col-4">
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-info btn-lg" id="run">Run</button>
+    </div>
+    
     <div class="form-group">
         <label for="id_runs" class="col-form-label">Simulations</label>
-        <input type="text" name="runs" class="form-control" aria-expanded="false" required id="id_runs" value="1000">
+        <input type="text" name="runs" class="form-control form-control-sm" aria-expanded="false" required id="id_runs" value="1000">
     </div>
-</div>
+
 <!-- User -->
-<div class="col-4">
     <div class="form-group">
         <label for="id_user_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control" id="id_user_suit_1">
+        <select class="form-control form-control-sm" id="id_user_suit_1">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -17,7 +21,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_user_number_1">
+        <select class="form-control form-control-sm" id="id_user_number_1">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -34,7 +38,7 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control" id="id_user_suit_2">
+        <select class="form-control form-control-sm" id="id_user_suit_2">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -42,7 +46,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_user_number_2">
+        <select class="form-control form-control-sm" id="id_user_number_2">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -59,13 +63,13 @@
             <option value="14">Ace</option>
         </select>
     </div>
-</div>
+
     
 <!-- Other1 -->
-<div class="col-4">
+
     <div class="form-group">
         <label for="id_other1_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control" id="id_other1_suit_1">
+        <select class="form-control form-control-sm" id="id_other1_suit_1">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -73,7 +77,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other1_number_1">
+        <select class="form-control form-control-sm" id="id_other1_number_1">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -90,7 +94,7 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control" id="id_other1_suit_2">
+        <select class="form-control form-control-sm" id="id_other1_suit_2">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -98,7 +102,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other1_number_2">
+        <select class="form-control form-control-sm" id="id_other1_number_2">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -115,13 +119,13 @@
             <option value="14">Ace</option>
         </select>
     </div>
-</div>
+
     
 <!-- Other2 -->
-<div class="col-4">
+
     <div class="form-group">
         <label for="id_other2_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control" id="id_other2_suit_1">
+        <select class="form-control form-control-sm" id="id_other2_suit_1">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -129,7 +133,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other2_number_1">
+        <select class="form-control form-control-sm" id="id_other2_number_1">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -146,7 +150,7 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control" id="id_other2_suit_2">
+        <select class="form-control form-control-sm" id="id_other2_suit_2">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -154,7 +158,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other2_number_2">
+        <select class="form-control form-control-sm" id="id_other2_number_2">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -171,13 +175,13 @@
             <option value="14">Ace</option>
         </select>
     </div>
-</div> 
+
  
 <!-- Other3 -->
-<div class="col-4">
+
     <div class="form-group">
         <label for="id_other3_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control" id="id_other3_suit_1">
+        <select class="form-control form-control-sm" id="id_other3_suit_1">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -185,7 +189,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other3_number_1">
+        <select class="form-control form-control-sm" id="id_other3_number_1">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -202,7 +206,7 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control" id="id_other3_suit_2">
+        <select class="form-control form-control-sm" id="id_other3_suit_2">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -210,7 +214,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other3_number_2">
+        <select class="form-control form-control-sm" id="id_other3_number_2">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -227,13 +231,13 @@
             <option value="14">Ace</option>
         </select>
     </div>
-</div>
+
     
 <!-- Other4 -->
-<div class="col-4">
+
     <div class="form-group">
         <label for="id_other4_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control" id="id_other4_suit_1">
+        <select class="form-control form-control-sm" id="id_other4_suit_1">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -241,7 +245,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other4_number_1">
+        <select class="form-control form-control-sm" id="id_other4_number_1">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -258,7 +262,7 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control" id="id_other4_suit_2">
+        <select class="form-control form-control-sm" id="id_other4_suit_2">
           <option value="" selected="selected">--</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
@@ -266,7 +270,7 @@
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control" id="id_other4_number_2">
+        <select class="form-control form-control-sm" id="id_other4_number_2">
             <option value="" selected="selected">--</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -283,15 +287,4 @@
             <option value="14">Ace</option>
         </select>
     </div>
-</div>
-    
-<div class="row">
-	<div class="col-md-12">
-		<div class="form-group row">
-			<div class="col-md-12">
-				<button type="submit" class="btn btn-info btn-lg" id="run">Run</button>
-			</div>
-		</div>
-	</div>
-</div>
 </form>
