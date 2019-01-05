@@ -1,6 +1,12 @@
 jQuery.ajaxSettings.traditional = true
 
-var first_update = true;
+$("#pokerForm").validate({
+  submitHandler: function(form) {
+    // do other things for a valid form
+    //form.submit();
+  }
+});
+
 
 /* attach a submit handler to the form */
 $("#pokerForm").submit(function(event) {
