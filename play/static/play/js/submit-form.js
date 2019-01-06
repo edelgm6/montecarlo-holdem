@@ -31,50 +31,54 @@ $("#pokerForm").submit(function(event) {
     console.log(post_data);
     
     /* Send the data using post with element id name and name2*/
-    var posting = jQuery.post( url, post_data );
+    if (getDuplicateCards().length === 0) {
+        var posting = jQuery.post( url, post_data );
 
-    /* Alerts the results */
-    posting.done(function( data ) {
-        console.log(data);
-        var results = data.results;
-        var wins = [
-            results.straight_flush.wins,
-            results.four_of_a_kind.wins,
-            results.full_house.wins,
-            results.flush.wins,
-            results.straight.wins,
-            results.three_of_a_kind.wins,
-            results.two_pair.wins,
-            results.pair.wins,
-            results.high_card.wins
-        ];
+        /* Alerts the results */
+        posting.done(function( data ) {
+            console.log(data);
+            var results = data.results;
+            var wins = [
+                results.straight_flush.wins,
+                results.four_of_a_kind.wins,
+                results.full_house.wins,
+                results.flush.wins,
+                results.straight.wins,
+                results.three_of_a_kind.wins,
+                results.two_pair.wins,
+                results.pair.wins,
+                results.high_card.wins
+            ];
 
-        var ties = [
-            results.straight_flush.ties,
-            results.four_of_a_kind.ties,
-            results.full_house.ties,
-            results.flush.ties,
-            results.straight.ties,
-            results.three_of_a_kind.ties,
-            results.two_pair.ties,
-            results.pair.ties,
-            results.high_card.ties
-        ];
+            var ties = [
+                results.straight_flush.ties,
+                results.four_of_a_kind.ties,
+                results.full_house.ties,
+                results.flush.ties,
+                results.straight.ties,
+                results.three_of_a_kind.ties,
+                results.two_pair.ties,
+                results.pair.ties,
+                results.high_card.ties
+            ];
 
-        var losses = [
-            results.straight_flush.losses,
-            results.four_of_a_kind.losses,
-            results.full_house.losses,
-            results.flush.losses,
-            results.straight.losses,
-            results.three_of_a_kind.losses,
-            results.two_pair.losses,
-            results.pair.losses,
-            results.high_card.losses
-        ];
+            var losses = [
+                results.straight_flush.losses,
+                results.four_of_a_kind.losses,
+                results.full_house.losses,
+                results.flush.losses,
+                results.straight.losses,
+                results.three_of_a_kind.losses,
+                results.two_pair.losses,
+                results.pair.losses,
+                results.high_card.losses
+            ];
+
+            createHandsChart(wins, losses, ties);
+        });
         
-        createHandsChart(wins, losses, ties);
-    });
+    }
+
     
 });
 

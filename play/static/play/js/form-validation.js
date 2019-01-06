@@ -1,7 +1,4 @@
-$(".form-control").change(function() {  
-    
-    $(".form-control").removeClass("is-invalid");
-    $(".invalid-feedback").remove();
+function getDuplicateCards() {
     
     //Add all cards currently selected to list
     var cards = [];
@@ -13,8 +10,6 @@ $(".form-control").change(function() {
         cards.push(card1);
         cards.push(card2);
     });
-    
-    //console.log(cards);
     
     //Create list of duplicate cards
     var duplicate_cards = [];
@@ -35,9 +30,16 @@ $(".form-control").change(function() {
             duplicate_cards.push(icard);
         }
     }
-    console.log(duplicate_cards);
+
+    return duplicate_cards;
+}
+
+$(".form-control").change(function() {  
     
-    var allow_submit = true;
+    $(".form-control").removeClass("is-invalid");
+    $(".invalid-feedback").remove();
+    
+    var duplicate_cards = getDuplicateCards();
     $(".hand").each(function() {
         
         var card = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
@@ -48,7 +50,7 @@ $(".form-control").change(function() {
             suit.addClass("is-invalid");
             number.addClass("is-invalid");
             number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
-            allow_submit = false;
+            //allow_submit = false;
         }
         
         card = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
@@ -59,11 +61,11 @@ $(".form-control").change(function() {
             suit.addClass("is-invalid");
             number.addClass("is-invalid");
             number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
-            allow_submit = false;
+            //allow_submit = false;
         }
         
     });
-    console.log(allow_submit);
-    return allow_submit;
+
+    //return allow_submit;
 
 });
