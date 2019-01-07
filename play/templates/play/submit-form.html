@@ -7,7 +7,13 @@
     
     <div class="form-group">
         <label for="id_runs" class="col-form-label">Simulations</label>
-        <input type="text" name="runs" class="form-control form-control-sm" aria-expanded="false" required id="id_runs" value="1000">
+        <select class="form-control form-control-sm" id="id_runs" name="runs">
+            <option value="10">10</option>
+            <option value="100">100</option>
+            <option value="1000" selected="selected">1,000</option>
+            <option value="5000">5,000</option>
+            <option value="10000">10,000</option>
+        </select>
     </div>
 
 <!-- User -->

@@ -1,39 +1,28 @@
-$(".form-check-input").change(function() {  
-    
-    var checked = this.checked;
-    var hand = $(this).parents(".hand");
-    
-    if (checked) {
-        console.log('wtf');
-        hand.find(".form-control").removeAttr("disabled");
-    } else {
-        console.log('nwtf');
-        hand.find(".form-control").prop("disabled", true);
-    }
-    /*
-    hand.find(".form-control").each(function() {
-        console.log('wtf');
-        if (checked) {
-            console.log('check');
-            $(this).removeAttr("disabled");
-        } else {
-            console.log('notcheck');
-            $(this).attr("disabled");
-        }
-    })*/
-});
-
 function getDuplicateCards() {
     
     //Add all cards currently selected to list
+    //TODO: Fix issue where we're checking for an 'active' player both in
+    //the duplicateDards method and the Validation method
+    
+    //TODO: Fix issue where we're checking for an 'active' player both in
+    //the duplicateDards method and the Validation method
     var cards = [];
     $(".hand").each(function() {
-        var card1 = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
-        
-        var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
-        
-        cards.push(card1);
-        cards.push(card2);
+        if ($(this).find(".form-check-input").length === 0 || $(this).find(".form-check-input").is(":checked")) {
+
+            if ($(this).find("select[name=suit1]").val() != "" && $(this).find("select[name=number1]").val() != "") {
+                var card1 = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
+                cards.push(card1);
+            }
+
+            if ($(this).find("select[name=suit2]").val() != "" && $(this).find("select[name=number2]").val() != "") {
+                var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
+                cards.push(card2);
+            }
+            
+            //cards.push(card1);
+            //cards.push(card2);
+        }
     });
     
     //Create list of duplicate cards
@@ -55,42 +44,64 @@ function getDuplicateCards() {
             duplicate_cards.push(icard);
         }
     }
-
+    console.log(duplicate_cards);
     return duplicate_cards;
 }
 
-$(".form-control").change(function() {  
-    
+//TODO: change to only validate forms that are active
+function validateForm() {
+
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").remove();
     
     var duplicate_cards = getDuplicateCards();
     $(".hand").each(function() {
         
-        var card = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
+        if ($(this).find(".form-check-input").length === 0 || $(this).find(".form-check-input").is(":checked")) {
         
-        if (duplicate_cards.includes(card)) {
-            var suit = $(this).find("select[name=suit1]")
-            var number = $(this).find("select[name=number1]")
-            suit.addClass("is-invalid");
-            number.addClass("is-invalid");
-            number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
-            //allow_submit = false;
-        }
-        
-        card = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
-        
-        if (duplicate_cards.includes(card)) {
-            var suit = $(this).find("select[name=suit2]")
-            var number = $(this).find("select[name=number2]")
-            suit.addClass("is-invalid");
-            number.addClass("is-invalid");
-            number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
-            //allow_submit = false;
+            var card = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
+
+            if (duplicate_cards.includes(card)) {
+                var suit = $(this).find("select[name=suit1]")
+                var number = $(this).find("select[name=number1]")
+                suit.addClass("is-invalid");
+                number.addClass("is-invalid");
+                number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
+            }
+
+            card = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
+
+            if (duplicate_cards.includes(card)) {
+                var suit = $(this).find("select[name=suit2]")
+                var number = $(this).find("select[name=number2]")
+                suit.addClass("is-invalid");
+                number.addClass("is-invalid");
+                number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
+            }
         }
         
     });
+    
+}
 
-    //return allow_submit;
+$(".form-check-input").change(function() {  
+    
+    var checked = this.checked;
+    var hand = $(this).parents(".hand");
+    
+    if (checked) {
+        console.log('wtf');
+        hand.find(".form-control").removeAttr("disabled");
+    } else {
+        console.log('nwtf');
+        hand.find(".form-control").prop("disabled", true);
+    }
+    
+    validateForm();
+});
+
+$(".form-control").change(function() {  
+    
+    validateForm();
 
 });
