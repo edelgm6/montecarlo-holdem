@@ -15,7 +15,7 @@
     <div class="form-group">
         <label for="id_user_suit_1" class="col-form-label">Your hand</label>
         <select class="form-control form-control-sm" id="id_user_suit_1" name="suit1">
-          <option value="" selected="selected">--</option>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
@@ -23,7 +23,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_user_number_1" name="number1">
-            <option value="" selected="selected">--</option>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -40,7 +40,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_user_suit_2" name="suit2">
-          <option value="" selected="selected">--</option>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
@@ -48,7 +48,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_user_number_2" name="number2">
-            <option value="" selected="selected">--</option>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -69,10 +69,11 @@
     
 <!-- Other1 -->
     <div class="hand">
-    <div class="form-group">
-        <label for="id_other1_suit_1" class="col-form-label">Your hand</label>
+        <label for="id_other2_suit_1" class="col-form-label">Competitor 1</label>
+        <div class="form-group">
+        
         <select class="form-control form-control-sm" id="id_other1_suit_1" name="suit1">
-          <option value="" selected="selected">--</option>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
@@ -80,7 +81,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_other1_number_1" name="number1">
-            <option value="" selected="selected">--</option>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -97,7 +98,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_other1_suit_2" name="suit2">
-          <option value="" selected="selected">--</option>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
@@ -105,7 +106,7 @@
         </select>
 
         <select class="form-control form-control-sm" id="id_other1_number_2" name="number2">
-            <option value="" selected="selected">--</option>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -126,18 +127,22 @@
 <!-- Other2 -->
 
     <div class="hand">
-    <div class="form-group">
-        <label for="id_other2_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control form-control-sm" id="id_other2_suit_1" name="suit1">
-          <option value="" selected="selected">--</option>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Competitor 2</label>
+        </div>
+        <div class="form-group">
+
+        <select class="form-control form-control-sm" id="id_other2_suit_1" name="suit1" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other2_number_1" name="number1">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other2_number_1" name="number1" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -153,16 +158,16 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other2_suit_2" name="suit2">
-          <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other2_suit_2" name="suit2" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other2_number_2" name="number2">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other2_number_2" name="number2" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -183,18 +188,21 @@
  
 <!-- Other3 -->
     <div class="hand">
-    <div class="form-group">
-        <label for="id_other3_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control form-control-sm" id="id_other3_suit_1" name="suit1">
-          <option value="" selected="selected">--</option>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Competitor 3</label>
+        </div>
+        <div class="form-group">
+        <select class="form-control form-control-sm" id="id_other3_suit_1" name="suit1" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other3_number_1" name="number1">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other3_number_1" name="number1" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -210,16 +218,16 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other3_suit_2" name="suit2">
-          <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other3_suit_2" name="suit2" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other3_number_2" name="number2">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other3_number_2" name="number2" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -239,18 +247,21 @@
     
 <!-- Other4 -->
     <div class="hand">
-    <div class="form-group">
-        <label for="id_other4_suit_1" class="col-form-label">Your hand</label>
-        <select class="form-control form-control-sm" id="id_other4_suit_1" name="suit1">
-          <option value="" selected="selected">--</option>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Competitor 4</label>
+        </div>
+        <div class="form-group">
+        <select class="form-control form-control-sm" id="id_other4_suit_1" name="suit1" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other4_number_1" name="number1">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other4_number_1" name="number1" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -266,16 +277,16 @@
             <option value="14">Ace</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other4_suit_2" name="suit2">
-          <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other4_suit_2" name="suit2" disabled>
+          <option value="" selected="selected">Suit</option>
           <option value="C">Clubs</option>
           <option value="D">Diamonds</option>
           <option value="H">Hearts</option>
           <option value="S">Spades</option>
         </select>
 
-        <select class="form-control form-control-sm" id="id_other4_number_2" name="number2">
-            <option value="" selected="selected">--</option>
+        <select class="form-control form-control-sm" id="id_other4_number_2" name="number2" disabled>
+            <option value="" selected="selected">Number</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>

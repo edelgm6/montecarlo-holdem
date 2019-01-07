@@ -1,20 +1,5 @@
 jQuery.ajaxSettings.traditional = true
 
-/*
-$.validator.addMethod("duplicateCards", function(value, element) {
-    return this.optional(element) || (parseFloat(value) > 0);
-}, "* Amount must be greater than zero");
-
-$("#pokerForm").validate({
-  submitHandler: function(form) {
-    // do other things for a valid form
-    //form.submit();
-      submitPokerForm();
-  }
-});
-*/
-
-/* attach a submit handler to the form */
 $("#pokerForm").submit(function(event) {
     event.preventDefault();
 

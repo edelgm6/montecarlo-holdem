@@ -1,3 +1,28 @@
+$(".form-check-input").change(function() {  
+    
+    var checked = this.checked;
+    var hand = $(this).parents(".hand");
+    
+    if (checked) {
+        console.log('wtf');
+        hand.find(".form-control").removeAttr("disabled");
+    } else {
+        console.log('nwtf');
+        hand.find(".form-control").prop("disabled", true);
+    }
+    /*
+    hand.find(".form-control").each(function() {
+        console.log('wtf');
+        if (checked) {
+            console.log('check');
+            $(this).removeAttr("disabled");
+        } else {
+            console.log('notcheck');
+            $(this).attr("disabled");
+        }
+    })*/
+});
+
 function getDuplicateCards() {
     
     //Add all cards currently selected to list
