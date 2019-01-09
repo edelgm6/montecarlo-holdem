@@ -2,22 +2,78 @@ jQuery.ajaxSettings.traditional = true
 
 $("#pokerForm").submit(function(event) {
     event.preventDefault();
+    
+    var user_hand = [];
+    var user_input = $("#user_hand")
+    if ($(user_input).find("select[name=suit1]").val() != "" && $(user_input).find("select[name=number1]").val() != "") {
+        var card1 = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
+        user_hand.push(card1);
+    }
 
-    /* get the action attribute from the <form action=""> element */
-    var $form = $( this ),
-      url = $form.attr( 'action' );
+    if ($(user_input).find("select[name=suit2]").val() != "" && $(user_input).find("select[name=number2]").val() != "") {
+        var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
+        user_hand.push(card2);
+    }
+    
+    
+    var other_hands = [
+        $("#other_hand_1"),
+        $("#other_hand_2"),
+        $("#other_hand_3"),
+        $("#other_hand_4")
+    ];
+    
 
+    var submit_hands = [];
+    var additional_players = 0;
+    for (var i = 0; i < other_hands.length; i++) {
+        var hand = other_hands[i];
+        if ($(hand).find(".form-check-input").length === 0 || $(hand).find(".form-check-input").is(":checked")) {
+            
+            var cards = [];
+            
+            if ($(hand).find("select[name=suit1]").val() != "" && $(hand).find("select[name=number1]").val() != "") {
+                var card1 = $(hand).find("select[name=suit1]").val() + $(hand).find("select[name=number1]").val();
+                cards.push(card1);
+            }
+
+            if ($(hand).find("select[name=suit2]").val() != "" && $(hand).find("select[name=number2]").val() != "") {
+                var card2 = $(hand).find("select[name=suit2]").val() + $(hand).find("select[name=number2]").val();
+                cards.push(card2);
+                console.log(typeof card2)
+            }
+
+            submit_hands.push(cards);
+            
+            additional_players++;
+        }
+    }
+    
     var post_data = {
-        'runs': $('#id_runs').val(),
-        'user_hand': [$('#id_user_suit_1').val() + $('#id_user_number_1').val(), $('#id_user_suit_2').val() + $('#id_user_number_2').val()],
-        'additional_players': 1
-    };
-
+        runs: $("#id_runs").val(),
+        user_hand: user_hand,
+        additional_players: additional_players,
+        additional_hands: submit_hands
+        };
+    
     console.log(post_data);
     
     /* Send the data using post with element id name and name2*/
     if (getDuplicateCards().length === 0) {
-        var posting = jQuery.post( url, post_data );
+        /* get the action attribute from the <form action=""> element */
+        var $form = $( this ),
+          url = $form.attr( "action" );
+        
+        //var posting = jQuery.post( url, post_data );
+        var posting = jQuery.ajax({
+            url: url,
+            type: "POST",
+            data: JSON.stringify(post_data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(){
+            }
+        });
 
         /* Alerts the results */
         posting.done(function( data ) {

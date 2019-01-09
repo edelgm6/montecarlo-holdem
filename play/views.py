@@ -16,13 +16,15 @@ class ResultsView(APIView):
     
     def post(self, request, *args, **kwargs):
         
+        print(request.data)
         serializer = SimulationSerializer(data=request.data)
         
         if serializer.is_valid():
             simulation = serializer.save()
+            
             simulation.run_simulation()
             
             return Response(serializer.data)
-        
+        print(serializer.errors)
         return Response(serializer.errors)
         

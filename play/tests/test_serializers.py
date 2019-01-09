@@ -16,6 +16,8 @@ class SimulationSerializerTestCase(TestCase):
             
         serializer = SimulationSerializer(data=data)
         valid = serializer.is_valid()
+        print(serializer.errors)
+        
         simulation = serializer.save()
         self.assertTrue(valid)
         self.assertEqual(simulation.user_hand, ['', ''])

@@ -3,9 +3,6 @@ function getDuplicateCards() {
     //Add all cards currently selected to list
     //TODO: Fix issue where we're checking for an 'active' player both in
     //the duplicateDards method and the Validation method
-    
-    //TODO: Fix issue where we're checking for an 'active' player both in
-    //the duplicateDards method and the Validation method
     var cards = [];
     $(".hand").each(function() {
         if ($(this).find(".form-check-input").length === 0 || $(this).find(".form-check-input").is(":checked")) {
@@ -19,9 +16,6 @@ function getDuplicateCards() {
                 var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
                 cards.push(card2);
             }
-            
-            //cards.push(card1);
-            //cards.push(card2);
         }
     });
     
