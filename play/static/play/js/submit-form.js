@@ -56,8 +56,6 @@ $("#pokerForm").submit(function(event) {
         additional_hands: submit_hands
         };
     
-    console.log(post_data);
-    
     /* Send the data using post with element id name and name2*/
     if (getDuplicateCards().length === 0) {
         /* get the action attribute from the <form action=""> element */
@@ -116,6 +114,7 @@ $("#pokerForm").submit(function(event) {
             ];
 
             createHandsChart(wins, losses, ties);
+            createWinChart(data.wins, data.losses, data.ties);
         });
         
     }
@@ -123,14 +122,25 @@ $("#pokerForm").submit(function(event) {
     
 });
 
+function createWinChart (wins, losses, ties) {
+    if (Object.keys(winChart).length==0) {
+        buildWinChart(wins, losses, ties);
+    } else {
+        winChart['data']['datasets'][0]['data'] = [wins];
+        winChart['data']['datasets'][1]['data'] = [losses];
+        winChart['data']['datasets'][2]['data'] = [ties];
+        winChart.update()
+    };
+}
+
 function createHandsChart (wins, losses, ties) {
-        if (Object.keys(handsChart).length==0) {
-            buildHandsChart(wins, losses, ties);
-        } else {
-            console.log('come on now')
-            handsChart['data']['datasets'][0]['data'] = wins;
-            handsChart['data']['datasets'][1]['data'] = losses;
-            handsChart['data']['datasets'][2]['data'] = ties;
-            handsChart.update()
-        };
+    if (Object.keys(handsChart).length==0) {
+        buildHandsChart(wins, losses, ties);
+    } else {
+        console.log('come on now')
+        handsChart['data']['datasets'][0]['data'] = wins;
+        handsChart['data']['datasets'][1]['data'] = losses;
+        handsChart['data']['datasets'][2]['data'] = ties;
+        handsChart.update()
+    };
 }

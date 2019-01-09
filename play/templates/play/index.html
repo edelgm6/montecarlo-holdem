@@ -27,8 +27,14 @@
       {% include "play/submit-form.html" %}      
     </div>   
     
-    <div class="col-md-9">    
-    <canvas id="myChart"></canvas>
+    <div class="col-md-9"> 
+    <div class="row">
+    <canvas id="winChart"></canvas>
+    </div>
+    
+    <div class="row">
+    <canvas id="handChart"></canvas>
+    </div>
     </div>
     </div>
     </main><!-- /.container -->
@@ -42,6 +48,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> 
     <script src="{% static "play/js/submit-form.js" %}"></script>
     <script src="{% static "play/js/hand-chart.js" %}"></script>
+    <script src="{% static "play/js/win-chart.js" %}"></script>
     <script src="{% static "play/js/form-validation.js" %}"></script>
     
     

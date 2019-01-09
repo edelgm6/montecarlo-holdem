@@ -1,32 +1,32 @@
-var ctx = document.getElementById('handChart').getContext('2d');
+var winChartCtx = document.getElementById('winChart').getContext('2d');
 
-var handsChart = {};
+var winChart = {};
 
-function buildHandsChart(wins, losses, ties) {
-    handsChart = new Chart(ctx, {
+function buildWinChart(wins, losses, ties) {
+    winChart = new Chart(winChartCtx, {
         // The type of chart we want to create
         type: 'horizontalBar',
 
         // The data for our dataset
         data: {
-            labels: ["Straight flush", "Four of a kind", "Full house", "Flush", "Straight", "Three of a kind", "Two pair", "Pair", "High card"],
+            labels: ["Outcomes"],
             datasets: [{
                 label: "wins",
                 stack: "wins",
                 backgroundColor: '#A6BFCC',
-                data: wins,
+                data: [wins],
             },
             {
                 label: "losses",
                 stack: "losses",
                 backgroundColor: '#2A3948',
-                data: losses,
+                data: [losses],
             },
             {
                 label: "ties",
                 stack: "ties",
                 backgroundColor: '#32668F',
-                data: ties,
+                data: [ties],
             }]
         },
 
@@ -48,5 +48,5 @@ function buildHandsChart(wins, losses, ties) {
             }
         }
     })
-    handsChart.update();
+    winChart.update();
     }
