@@ -46,7 +46,7 @@ function getDuplicateCards() {
 function validateForm() {
 
     $(".form-control").removeClass("is-invalid");
-    $(".invalid-feedback").remove();
+    $(".custom-error").remove();
     
     var duplicate_cards = getDuplicateCards();
     $(".hand").each(function() {
@@ -58,9 +58,10 @@ function validateForm() {
             if (duplicate_cards.includes(card)) {
                 var suit = $(this).find("select[name=suit1]")
                 var number = $(this).find("select[name=number1]")
+                var row = $(this).find(".card-one")
                 suit.addClass("is-invalid");
                 number.addClass("is-invalid");
-                number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
+                row.after("<div class='custom-error' style='color:red;font-size:80%;'>Can't have more than one of the same card</div>");
             }
 
             card = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
@@ -68,9 +69,10 @@ function validateForm() {
             if (duplicate_cards.includes(card)) {
                 var suit = $(this).find("select[name=suit2]")
                 var number = $(this).find("select[name=number2]")
+                var row = $(this).find(".card-two")
                 suit.addClass("is-invalid");
                 number.addClass("is-invalid");
-                number.after("<div class='invalid-feedback'>Can't have more than one of the same card</div>");
+                row.after("<div class='custom-error' style='color:red;font-size:80%;'>Can't have more than one of the same card</div>");
             }
         }
         

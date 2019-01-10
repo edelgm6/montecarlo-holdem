@@ -1,5 +1,4 @@
 var winChartCtx = document.getElementById('winChart').getContext('2d');
-
 var winChart = {};
 
 function buildWinChart(wins, losses, ties) {

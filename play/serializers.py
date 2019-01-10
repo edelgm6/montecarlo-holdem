@@ -1,11 +1,6 @@
 from rest_framework import serializers
 from play.models import Simulation
     
-"""
-class HandSerializer(serializers.Serializer):
-    hand = serializers.ListField()
-
-"""
 class SimulationSerializer(serializers.Serializer):
     runs = serializers.IntegerField(min_value=1)
     user_hand = serializers.ListField(
@@ -16,8 +11,6 @@ class SimulationSerializer(serializers.Serializer):
     )
     
     additional_players = serializers.IntegerField(max_value=7, min_value=1)
-    
-    #additional_hands = serializers.CharField()
     
     additional_hands = serializers.ListField(
         child=serializers.ListField(
