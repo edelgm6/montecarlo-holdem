@@ -26,8 +26,17 @@
     <div class="col-md-3">
       {% include "play/submit-form.html" %}      
     </div>   
+    <div class="col-md-1"></div>
+    <div class="col-md-8"> 
+    <div class="row">
     
-    <div class="col-md-9"> 
+    <div class="results p-3 mb-2 bg-secondary text-white" style="visibility:hidden">
+        <p>Ran <span class="run-count"></span> simulations between <span class="player-count"></span> players.</p>
+        <p>Hands were: 
+        <span class='hands'></span>
+        </p>
+    </div>
+    </div>
     <div class="row">
     <canvas id="winChart" height="80"></canvas>
     </div>

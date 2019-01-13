@@ -76,6 +76,9 @@ $("#pokerForm").submit(function(event) {
         /* Alerts the results */
         posting.done(function( data ) {
             console.log(data);
+            
+            writeResults(data);
+            
             var results = data.results;
             var wins = [
                 results.straight_flush.wins,
@@ -121,6 +124,84 @@ $("#pokerForm").submit(function(event) {
 
     
 });
+
+function writeResults (data) {
+    var user_hand = data.user_hand;
+    var other_count = data.additional_players;
+    var other_hands = data.additional_hands;
+    var runs = data.runs;
+    var hand_block = $('.hands');
+    
+    hand_block.find("li").remove();
+    
+    $(".run-count").text(runs);
+    $(".player-count").text(other_count + 1);
+    
+    var suit_map = {
+        D: 'Diamonds',
+        S: 'Spades',
+        C: 'Clubs',
+        H: 'Hearts'
+    }
+    
+    var number_map = {
+        2: 'Two',
+        3: 'Three',
+        4: 'Four',
+        5: 'Five',
+        6: 'Six',
+        7: 'Seven',
+        8: 'Eight',
+        9: 'Nine',
+        10: 'Ten',
+        11: 'Jack',
+        12: 'Queen',
+        13: 'King',
+        14: 'Ace'
+    }
+    
+    var cards = ['Random cards', 'Random cards'];
+    for (i=0; i < user_hand.length; i++) {
+        var text = '';
+        var card = user_hand[i];
+        var suit = card[0];
+        var number = card.slice((card.length - 1) * -1);
+        
+        text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
+        console.log(text);
+        cards[i] = text;
+    }
+    
+    hand_block.append("<li>Main player: " + cards[0] + " / " + cards[1] + "</li>");
+    
+    cards = []
+    for (i=0; i < other_count; i++) {
+        cards.push(['Random cards', 'Random cards'])
+    }
+    
+    for (i=0; i < other_hands.length; i++) {
+        var hand = other_hands[i];
+        for (j=0; j < hand.length; j++) {
+            var text = '';
+            var card = hand[j];
+            var suit = card[0];
+            var number = card.slice((card.length - 1) * -1);
+            
+            text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
+            console.log(text);
+            cards[i][j] = text;
+        }
+    } 
+    
+    for (i=0; i < other_count; i++) {
+        hand_block.append(function() {
+            return "<li>Other player: " + cards[i][0] + " / " + cards[i][1] + "</li>";
+        });
+    }
+    
+    $('.results').css('visibility', 'visible');
+    
+}
 
 function createWinChart (wins, losses, ties) {
     if (Object.keys(winChart).length==0) {
