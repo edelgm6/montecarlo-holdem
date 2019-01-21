@@ -3,7 +3,34 @@ from play.models import Simulation
 from play.serializers import SimulationSerializer
 
 class SimulationSerializerTestCase(TestCase):
- 
+
+    def test_successful_with_flop_turn_river_cards(self):
+
+        data = {
+            'runs': 10,
+            'user_hand': ['', ''],
+            'additional_players': 2,
+            'additional_hands': [['', ''], ['H14', '']],
+            'flop_cards': ['D3', 'D4', 'D5'],
+            'turn_card': 'D14',
+            'river_card': 'C14'
+        }
+        
+            
+        serializer = SimulationSerializer(data=data)
+        valid = serializer.is_valid()
+        print(serializer.errors)
+        
+        simulation = serializer.save()
+        self.assertTrue(valid)
+        self.assertEqual(simulation.user_hand, ['', ''])
+        self.assertEqual(simulation.additional_hands, [['', ''], ['H14', '']])
+        
+        simulation.run_simulation()
+        self.assertTrue('H14' in simulation.all_players[2].get_hand())
+        for player in simulation.all_players:
+            self.assertEqual(len(player.hand), 2)
+    
     def test_successful_with_empty_cards(self):
 
         data = {

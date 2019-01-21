@@ -16,13 +16,24 @@ class SimulationSerializer(serializers.Serializer):
         child=serializers.ListField(
             child=serializers.CharField(max_length=3, min_length=2, allow_blank=True),
             min_length=0, 
-            max_length=5,
+            max_length=3,
             required=False),
         min_length=0, 
-        max_length=5,
+        max_length=4,
         required=False
     )
     
+    flop_cards = serializers.ListField(
+        child=serializers.CharField(max_length=3, min_length=2, allow_blank=True),
+        min_length=0, 
+        max_length=3,
+        required=False
+    )
+    
+    turn_card = serializers.CharField(max_length=3, min_length=2, required=False)
+    flop_card = serializers.CharField(max_length=3, min_length=2, required=False)
+    
+    #Read only section
     results = serializers.DictField(
         child=serializers.DictField(
             child=serializers.IntegerField(min_value=0)

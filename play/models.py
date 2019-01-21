@@ -4,12 +4,15 @@ from play.rules import Suit, Hand, Stage
 from random import shuffle
 
 class Simulation:
-    def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[]):
+    def __init__(self, runs=1000, user_hand=[], additional_players=1, additional_hands=[], flop_cards=[], turn_card=None, river_card=None):
         self.runs = runs
         # Strip out '' values
         self.user_hand = user_hand
         self.additional_players = additional_players
         self.additional_hands = additional_hands
+        self.flop_cards = flop_cards
+        self.turn_card = turn_card
+        self.river_card = river_card
         
         self.user = Player(is_user=True, starting_hand=self.user_hand)
         self.results = self.generate_results_dict()
@@ -43,7 +46,13 @@ class Simulation:
             for player in self.all_players:
                 player.hand = []
             
-            game = Game(players=self.all_players)
+            game = Game(
+                players=self.all_players, 
+                flop_cards=self.flop_cards, 
+                turn_card=self.turn_card, 
+                river_card=self.river_card
+            )
+            
             game.deal()
             game.deal()
             game.deal()
@@ -66,7 +75,7 @@ class Simulation:
                 hand_results['losses'] += 1
                      
 class Game:
-    def __init__(self, players, flop_cards=[], turn_card='', river_card=''):
+    def __init__(self, players, flop_cards=[], turn_card=None, river_card=None):
         self.deck = Deck()
         self.stage = Stage.PREDEAL
         self.players = players
