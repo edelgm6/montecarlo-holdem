@@ -160,7 +160,7 @@ function writeResults (data) {
         14: 'Ace'
     }
     
-    var cards = ['Random cards', 'Random cards'];
+    var cards = ['Random card', 'Random card'];
     for (i=0; i < user_hand.length; i++) {
         var text = '';
         var card = user_hand[i];
@@ -176,7 +176,7 @@ function writeResults (data) {
     
     cards = []
     for (i=0; i < other_count; i++) {
-        cards.push(['Random cards', 'Random cards'])
+        cards.push(['Random card', 'Random card'])
     }
     
     for (i=0; i < other_hands.length; i++) {

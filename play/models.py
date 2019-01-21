@@ -66,21 +66,38 @@ class Simulation:
                 hand_results['losses'] += 1
                      
 class Game:
-    def __init__(self, players):
+    def __init__(self, players, flop_cards=[], turn_card='', river_card=''):
         self.deck = Deck()
         self.stage = Stage.PREDEAL
         self.players = players
         self.community = []
+        
+        self.flop_cards = []
+        self.turn_card = ''
+        self.river_card = ''
+        cards_to_remove = []
+        for card in self.deck.cards:
+            if repr(card) in flop_cards:
+                self.flop_cards.append(card)
+            elif repr(card) == turn_card:
+                self.turn_card = card
+            elif repr(card) == river_card:
+                self.river_card = card    
+            else:
+                continue
+                
+            cards_to_remove.append(card)
             
+        players_with_starting_hands = [player for player in self.players if player.starting_hand]
+        for player in players_with_starting_hands:
+            player.hand = [card for card in self.deck.cards if repr(card) in player.starting_hand]
+            cards_to_remove += player.hand
+                
+        [self.deck.cards.remove(card) for card in cards_to_remove]
+        
     def deal(self):
+        
         if self.stage == Stage.PREDEAL:
-            
-            players_with_starting_hands = [player for player in self.players if player.starting_hand]
-            for player in players_with_starting_hands:
-                player.hand = [card for card in self.deck.cards if repr(card) in player.starting_hand]
-                for card in player.hand:
-                    self.deck.cards.remove(card)
-
             for i in range(2):
                 for player in self.players:
                     if len(player.hand) < 2:
@@ -90,22 +107,41 @@ class Game:
             self.stage = Stage.PREFLOP
         
         elif self.stage == Stage.PREFLOP:
+            
+            self.community += self.flop_cards
+            
             #burn a card
             self.deck.cards.pop()
             
-            flop = self.deck.cards[-3:]
-            self.community = flop
-            self.deck.cards = self.deck.cards[:-3]
+            seeded_flop_count = len(self.flop_cards)
+            additional_flop_cards = -3 + seeded_flop_count
+            
+            if additional_flop_cards < 0:
+                flop = self.deck.cards[additional_flop_cards:]
+                self.community += flop
+                self.deck.cards = self.deck.cards[:additional_flop_cards]
             
             self.stage = Stage(self.stage.value + 1)
         
         elif self.stage.value < Stage.RIVER.value:
+            
+            #burn a card
             self.deck.cards.pop()
             
-            self.community.append(self.deck.cards.pop())
+            if self.stage == Stage.FLOP:
+                if self.turn_card:
+                    self.community.append(self.turn_card)
+                else:
+                    self.community.append(self.deck.cards.pop())
+            
+            if self.stage == Stage.TURN:
+                if self.river_card:
+                    self.community.append(self.river_card)
+                else:
+                    self.community.append(self.deck.cards.pop())
+            
             self.stage = Stage(self.stage.value + 1)
      
-    
     #Get rid of this and fold into the get_winning_player method
     def set_player_hands(self):
         for player in self.players:

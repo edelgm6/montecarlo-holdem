@@ -273,6 +273,119 @@ class DeckTestCase(TestCase):
         
 class GameTestCase(TestCase):
     
+    def test_passed_flop_cards_removed_from_deck(self):
+        flop_cards = ['D4', 'C14', 'D13']
+        players = [Player(), Player()]
+        
+        game = Game(players, flop_cards=flop_cards)
+        
+        self.assertEqual(len(game.deck.cards), 52-3)
+        self.assertEqual(len(game.flop_cards), 3)
+
+    def test_passing_blank_list_returns_full_community(self):
+        flop_cards = []
+        players = [Player(), Player()]
+        
+        game = Game(players, flop_cards=flop_cards)
+        
+        self.assertEqual(len(game.deck.cards), 52)
+        self.assertEqual(len(game.flop_cards), 0)
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        self.assertEqual(len(game.community), 5)
+        
+    def test_passed_flop_cards_removed_from_deck_one_card(self):
+        flop_cards = ['D4']
+        players = [Player(), Player()]
+        
+        game = Game(players, flop_cards=flop_cards)
+        
+        self.assertEqual(len(game.deck.cards), 52-1)
+        self.assertEqual(len(game.flop_cards), 1)
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        self.assertEqual(len(game.community), 5)
+        self.assertTrue('D4' == repr(game.community[0]))
+        
+    def test_passed_flop_cards_removed_from_deck_two_cards(self):
+        flop_cards = ['D4', 'C14']
+        players = [Player(), Player()]
+        
+        game = Game(players, flop_cards=flop_cards)
+        
+        self.assertEqual(len(game.deck.cards), 52-2)
+        self.assertEqual(len(game.flop_cards), 2)
+        game.deal()
+        game.deal()
+        game.deal()
+        game.deal()
+        
+        self.assertEqual(len(game.community), 5)
+        self.assertTrue('D4' in [repr(game.community[0]), repr(game.community[1])])
+        self.assertTrue('C14' in [repr(game.community[0]), repr(game.community[1])])
+        
+    def test_passed_turn_card_removed_from_deck(self):
+        turn_card = 'D14'
+        players = [Player(), Player()]
+        
+        game = Game(players, turn_card=turn_card)
+        
+        self.assertEqual(len(game.deck.cards), 52-1)
+        self.assertEqual(game.flop_cards, [])
+        self.assertEqual(repr(game.turn_card), 'D14')
+        
+    def test_passed_river_card_removed_from_deck(self):
+        river_card = 'D14'
+        players = [Player(), Player()]
+        
+        game = Game(players, river_card=river_card)
+        
+        self.assertEqual(len(game.deck.cards), 52-1)
+        self.assertEqual(game.flop_cards, [])
+        self.assertEqual(repr(game.river_card), 'D14')
+        
+    
+    def test_passed_flop_cards_are_in_community(self):
+        flop_cards = ['D4', 'C14', 'D13']
+        players = [Player(), Player()]
+        
+        game = Game(players, flop_cards=flop_cards)
+        game.deal()
+        game.deal()
+        self.assertEqual(len(game.community), 3)
+        game.deal()
+        self.assertEqual(len(game.community), 4)
+        game.deal()
+        self.assertEqual(len(game.community), 5)
+        
+        self.assertEqual(3, len(game.flop_cards))
+        self.assertTrue(repr(game.community[0]) in flop_cards)
+        self.assertTrue(repr(game.community[1]) in flop_cards)
+        self.assertTrue(repr(game.community[2]) in flop_cards)
+        
+    def test_passed_turn_card_is_in_community(self):
+        turn_card = 'D4'
+        players = [Player(), Player()]
+        
+        game = Game(players, turn_card=turn_card)
+        game.deal()
+        game.deal()
+        self.assertEqual(len(game.community), 3)
+        game.deal()
+        self.assertEqual(len(game.community), 4)
+        game.deal()
+        self.assertEqual(len(game.community), 5)
+        
+        self.assertEqual(turn_card, repr(game.turn_card))
+        self.assertEqual(repr(game.community[3]), 'D4')
+        
+    
     def test_deal_maintains_player_start_hands(self):
         user_hand = ['D4', 'C14']
         other_hand = [['D13', 'C13']]
