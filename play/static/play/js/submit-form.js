@@ -40,7 +40,6 @@ $("#pokerForm").submit(function(event) {
             if ($(hand).find("select[name=suit2]").val() != "" && $(hand).find("select[name=number2]").val() != "") {
                 var card2 = $(hand).find("select[name=suit2]").val() + $(hand).find("select[name=number2]").val();
                 cards.push(card2);
-                console.log(typeof card2)
             }
 
             submit_hands.push(cards);

@@ -7,6 +7,7 @@ function getDuplicateCards() {
     $(".hand").each(function() {
         if ($(this).find(".form-check-input").length === 0 || $(this).find(".form-check-input").is(":checked")) {
 
+            console.log('wtf');
             if ($(this).find("select[name=suit1]").val() != "" && $(this).find("select[name=number1]").val() != "") {
                 var card1 = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
                 cards.push(card1);
@@ -16,9 +17,15 @@ function getDuplicateCards() {
                 var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
                 cards.push(card2);
             }
+            
+            if ($(this).find("select[name=suit3]").val() != "" && $(this).find("select[name=number3]").val() != "") {
+                var card3 = $(this).find("select[name=suit3]").val() + $(this).find("select[name=number3]").val();
+                cards.push(card3);
+            }
+            
         }
     });
-    
+    console.log(cards);
     //Create list of duplicate cards
     var duplicate_cards = [];
     for (var i=0; i < cards.length; i++) {
@@ -38,7 +45,6 @@ function getDuplicateCards() {
             duplicate_cards.push(icard);
         }
     }
-    console.log(duplicate_cards);
     return duplicate_cards;
 }
 
@@ -74,6 +80,17 @@ function validateForm() {
                 number.addClass("is-invalid");
                 row.after("<div class='custom-error' style='color:red;font-size:80%;'>Can't have more than one of the same card</div>");
             }
+            
+            card = $(this).find("select[name=suit3]").val() + $(this).find("select[name=number3]").val();
+
+            if (duplicate_cards.includes(card)) {
+                var suit = $(this).find("select[name=suit3]")
+                var number = $(this).find("select[name=number3]")
+                var row = $(this).find(".card-three")
+                suit.addClass("is-invalid");
+                number.addClass("is-invalid");
+                row.after("<div class='custom-error' style='color:red;font-size:80%;'>Can't have more than one of the same card</div>");
+            }
         }
         
     });
@@ -86,10 +103,8 @@ $(".form-check-input").change(function() {
     var hand = $(this).parents(".hand");
     
     if (checked) {
-        console.log('wtf');
         hand.find(".form-control").removeAttr("disabled");
     } else {
-        console.log('nwtf');
         hand.find(".form-control").prop("disabled", true);
     }
     
