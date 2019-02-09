@@ -30,8 +30,8 @@ class SimulationSerializer(serializers.Serializer):
         required=False
     )
     
-    turn_card = serializers.CharField(max_length=3, min_length=2, required=False)
-    flop_card = serializers.CharField(max_length=3, min_length=2, required=False)
+    turn_card = serializers.CharField(max_length=3, min_length=2, required=False, allow_blank=True)
+    river_card = serializers.CharField(max_length=3, min_length=2, required=False, allow_blank=True)
     
     #Read only section
     results = serializers.DictField(

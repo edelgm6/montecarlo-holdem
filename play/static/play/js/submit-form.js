@@ -3,6 +3,7 @@ jQuery.ajaxSettings.traditional = true
 $("#pokerForm").submit(function(event) {
     event.preventDefault();
     
+    //Build user hand
     var user_hand = [];
     var user_input = $("#user_hand")
     if ($(user_input).find("select[name=suit1]").val() != "" && $(user_input).find("select[name=number1]").val() != "") {
@@ -15,7 +16,43 @@ $("#pokerForm").submit(function(event) {
         user_hand.push(card2);
     }
     
+    //Build flop
+    var flop_hand = [];
+    var flop = $("#flop")
+    if ($(flop).find("select[name=suit1]").val() != "" && $(flop).find("select[name=number1]").val() != "") {
+        var card1 = $(flop).find("select[name=suit1]").val() + $(flop).find("select[name=number1]").val();
+        flop_hand.push(card1);
+    }
     
+    if ($(flop).find("select[name=suit2]").val() != "" && $(flop).find("select[name=number2]").val() != "") {
+        var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
+        flop_hand.push(card2);
+    }
+    
+    if ($(flop).find("select[name=suit3]").val() != "" && $(flop).find("select[name=number3]").val() != "") {
+        var card2 = $(this).find("select[name=suit3]").val() + $(this).find("select[name=number3]").val();
+        flop_hand.push(card3);
+    }
+    
+    //Build turn
+    var turn_card = '';
+    var comm_card = $("#turn")
+    if ($(comm_card).find("select[name=suit1]").val() != "" && $(comm_card).find("select[name=number1]").val() != "") {
+        var card1 = $(comm_card).find("select[name=suit1]").val() + $(comm_card).find("select[name=number1]").val();
+        console.log(card1);
+        turn_card=card1;
+    }
+    
+    //Build river
+    var river_card = '';
+    var comm_card = $("#river")
+    if ($(comm_card).find("select[name=suit1]").val() != "" && $(comm_card).find("select[name=number1]").val() != "") {
+        var card1 = $(comm_card).find("select[name=suit1]").val() + $(comm_card).find("select[name=number1]").val();
+        console.log(card1);
+        river_card=card1;
+    }
+    
+    //Build other players' hands
     var other_hands = [
         $("#other_hand_1"),
         $("#other_hand_2"),
@@ -52,8 +89,13 @@ $("#pokerForm").submit(function(event) {
         runs: $("#id_runs").val(),
         user_hand: user_hand,
         additional_players: additional_players,
-        additional_hands: submit_hands
+        additional_hands: submit_hands,
+        flop_cards: flop_hand,
+        turn_card: turn_card,
+        river_card: river_card
         };
+    
+    console.log(post_data);
     
     /* Send the data using post with element id name and name2*/
     if (getDuplicateCards().length === 0) {
@@ -167,7 +209,6 @@ function writeResults (data) {
         var number = card.slice((card.length - 1) * -1);
         
         text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
-        console.log(text);
         cards[i] = text;
     }
     
@@ -187,7 +228,6 @@ function writeResults (data) {
             var number = card.slice((card.length - 1) * -1);
             
             text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
-            console.log(text);
             cards[i][j] = text;
         }
     } 
@@ -217,7 +257,6 @@ function createHandsChart (wins, losses, ties) {
     if (Object.keys(handsChart).length==0) {
         buildHandsChart(wins, losses, ties);
     } else {
-        console.log('come on now')
         handsChart['data']['datasets'][0]['data'] = wins;
         handsChart['data']['datasets'][1]['data'] = losses;
         handsChart['data']['datasets'][2]['data'] = ties;

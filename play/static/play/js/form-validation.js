@@ -25,7 +25,6 @@ function getDuplicateCards() {
             
         }
     });
-    console.log(cards);
     //Create list of duplicate cards
     var duplicate_cards = [];
     for (var i=0; i < cards.length; i++) {
