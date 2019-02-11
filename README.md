@@ -34,7 +34,7 @@ DATABASES = {
 }
 ```
 
-`Run python3 manage.py migrate`
+Run `python3 manage.py migrate`
 
 ## Running the tests
 My goal with this project is to have 100% test coverage server-side.
@@ -44,13 +44,13 @@ My goal with this project is to have 100% test coverage server-side.
 `coverage html` generates the coverage files
 
 Built With
-Django
-Bootstrap
-Chart.js - Open source HTML5 charts
-Author: Garrett Edel LinkedIn(https://www.linkedin.com/in/garrettedel/)
+- Django
+- Bootstrap
+- Chart.js - Open source HTML5 charts
 
-License
-MIT License
+Author: Garrett Edel | LinkedIn(https://www.linkedin.com/in/garrettedel/)
+
+License: MIT License
 
 Copyright (c) 2019 Garrett Edel
 
