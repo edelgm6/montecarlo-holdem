@@ -1,15 +1,18 @@
-montecarlo-poker
+# montecarlo-poker
 montecarlo-poker is a Texas Hold Em Montecarlo simulator to calculate the probability of different hands and win frequency. It is hosted at [https://montecarlo-poker.herokuapp.com/](https://montecarlo-poker.herokuapp.com/).
 
 Would love any feedback, pull requests, etc.
 
-Getting Started
+## Getting Started
 Requirements: Python 3
 
 Getting set up locally is simple. Once you've cloned the project:
 
-Run pip install requirements.txt
+`Run pip install requirements.txt`
+
 Set up a local_settings.py file and drop it in the holdem/ folder where the settings.py file lives
+
+```
 # local_settings.py
 
 import os
@@ -29,20 +32,22 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-Run python3 manage.py migrate
-Running the tests
+```
+
+`Run python3 manage.py migrate`
+
+## Running the tests
 My goal with this project is to have 100% test coverage server-side.
 
-coverage run --source='.' manage.py test runs tests
+`coverage run --source='.' manage.py test runs tests`
 
-coverage html generates the coverage files
+`coverage html` generates the coverage files
 
 Built With
 Django
 Bootstrap
 Chart.js - Open source HTML5 charts
-Author
-Garrett Edel LinkedIn(https://www.linkedin.com/in/garrettedel/)
+Author: Garrett Edel LinkedIn(https://www.linkedin.com/in/garrettedel/)
 
 License
 MIT License
