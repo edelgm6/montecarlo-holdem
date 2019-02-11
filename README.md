@@ -48,7 +48,7 @@ Built With
 - Bootstrap
 - Chart.js - Open source HTML5 charts
 
-Author: Garrett Edel | LinkedIn(https://www.linkedin.com/in/garrettedel/)
+Author: Garrett Edel | [LinkedIn](https://www.linkedin.com/in/garrettedel/)
 
 License: MIT License
 
