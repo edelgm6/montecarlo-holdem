@@ -170,6 +170,9 @@ function writeResults (data) {
     var user_hand = data.user_hand;
     var other_count = data.additional_players;
     var other_hands = data.additional_hands;
+    var flop = data.flop_cards;
+    var turn = data.turn_card;
+    var river = data.river_card;
     var runs = data.runs;
     var hand_block = $('.hands');
     
@@ -201,6 +204,7 @@ function writeResults (data) {
         14: 'Ace'
     }
     
+    //Hands section
     var cards = ['Random card', 'Random card'];
     for (i=0; i < user_hand.length; i++) {
         var text = '';
@@ -237,6 +241,39 @@ function writeResults (data) {
             return "<li>Other player: " + cards[i][0] + " / " + cards[i][1] + "</li>";
         });
     }
+    
+    //Community cards section
+    var cards = ['Random card', 'Random card', 'Random card', 'Random card', 'Random card'];
+    for (i=0; i < flop.length; i++) {
+        var text = '';
+        var card = flop[i];
+        var suit = card[0];
+        var number = card.slice((card.length - 1) * -1);
+        
+        text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
+        cards[i] = text;
+    }
+    
+    if (turn) {
+        var text = '';
+        var card = flop[i];
+        var suit = turn[0];
+        var number = turn.slice((turn.length - 1) * -1);
+        
+        text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
+        cards[3] = text;        
+    }
+    
+    if (river) {
+        var text = '';
+        var suit = river[0];
+        var number = river.slice((river.length - 1) * -1);
+        
+        text = number_map[parseInt(number, 10)] + ' of ' + suit_map[suit];
+        cards[4] = text;        
+    }
+    
+    hand_block.append("<li>Community: " + cards[0] + " / " + cards[1] + " / " + cards[2] + " / " + cards[3] +" / " + cards[4] + "</li>");
     
     $('.results').css('visibility', 'visible');
     
