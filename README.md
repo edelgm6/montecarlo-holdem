@@ -47,7 +47,8 @@ REST_FRAMEWORK = {
 
 ```
 
-Run `python3 manage.py migrate`
+Run `python manage.py migrate`
+Run `python manage.py collectstatic`
 
 ## Running the tests
 My goal with this project is to have 100% test coverage server-side.
