@@ -103,7 +103,7 @@ $("#pokerForm").submit(function(event) {
         var $form = $( this ),
           url = $form.attr( "action" );
         
-        //var posting = jQuery.post( url, post_data );
+        /*
         var posting = jQuery.ajax({
             url: url,
             type: "POST",
@@ -112,60 +112,74 @@ $("#pokerForm").submit(function(event) {
             contentType: "application/json; charset=utf-8",
             success: function(){
             }
-        });
-
-        /* Alerts the results */
-        posting.done(function( data ) {
-            $('.overlay').removeAttr('style');
-            console.log(data);
-            
-            writeResults(data);
-            
-            var results = data.results;
-            var wins = [
-                results.straight_flush.wins,
-                results.four_of_a_kind.wins,
-                results.full_house.wins,
-                results.flush.wins,
-                results.straight.wins,
-                results.three_of_a_kind.wins,
-                results.two_pair.wins,
-                results.pair.wins,
-                results.high_card.wins
-            ];
-
-            var ties = [
-                results.straight_flush.ties,
-                results.four_of_a_kind.ties,
-                results.full_house.ties,
-                results.flush.ties,
-                results.straight.ties,
-                results.three_of_a_kind.ties,
-                results.two_pair.ties,
-                results.pair.ties,
-                results.high_card.ties
-            ];
-
-            var losses = [
-                results.straight_flush.losses,
-                results.four_of_a_kind.losses,
-                results.full_house.losses,
-                results.flush.losses,
-                results.straight.losses,
-                results.three_of_a_kind.losses,
-                results.two_pair.losses,
-                results.pair.losses,
-                results.high_card.losses
-            ];
-
-            createHandsChart(wins, losses, ties);
-            createWinChart(data.wins, data.losses, data.ties);
-        });
+        });*/
         
+        jQuery.ajax({
+            url: url,
+            type: "POST",
+            data: JSON.stringify(post_data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(response){
+                successHandler(response);
+            },
+            error: function (request, status, error) {
+                $('.overlay').removeAttr('style');
+                alert(request.responseText);
+            }
+        });
     }
+})
 
-    
-});
+
+function successHandler(response) {
+    var data = response;
+    $('.overlay').removeAttr('style');
+    console.log(data);
+
+    writeResults(data);
+
+    var results = data.results;
+    var wins = [
+        results.straight_flush.wins,
+        results.four_of_a_kind.wins,
+        results.full_house.wins,
+        results.flush.wins,
+        results.straight.wins,
+        results.three_of_a_kind.wins,
+        results.two_pair.wins,
+        results.pair.wins,
+        results.high_card.wins
+    ];
+
+    var ties = [
+        results.straight_flush.ties,
+        results.four_of_a_kind.ties,
+        results.full_house.ties,
+        results.flush.ties,
+        results.straight.ties,
+        results.three_of_a_kind.ties,
+        results.two_pair.ties,
+        results.pair.ties,
+        results.high_card.ties
+    ];
+
+    var losses = [
+        results.straight_flush.losses,
+        results.four_of_a_kind.losses,
+        results.full_house.losses,
+        results.flush.losses,
+        results.straight.losses,
+        results.three_of_a_kind.losses,
+        results.two_pair.losses,
+        results.pair.losses,
+        results.high_card.losses
+    ];
+
+    createHandsChart(wins, losses, ties);
+    createWinChart(data.wins, data.losses, data.ties);
+
+}
 
 function writeResults (data) {
     var user_hand = data.user_hand;
