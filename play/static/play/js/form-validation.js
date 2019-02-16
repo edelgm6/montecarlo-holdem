@@ -7,7 +7,6 @@ function getDuplicateCards() {
     $(".hand").each(function() {
         if ($(this).find(".form-check-input").length === 0 || $(this).find(".form-check-input").is(":checked")) {
 
-            console.log('wtf');
             if ($(this).find("select[name=suit1]").val() != "" && $(this).find("select[name=number1]").val() != "") {
                 var card1 = $(this).find("select[name=suit1]").val() + $(this).find("select[name=number1]").val();
                 cards.push(card1);

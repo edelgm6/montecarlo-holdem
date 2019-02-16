@@ -25,12 +25,12 @@ $("#pokerForm").submit(function(event) {
     }
     
     if ($(flop).find("select[name=suit2]").val() != "" && $(flop).find("select[name=number2]").val() != "") {
-        var card2 = $(this).find("select[name=suit2]").val() + $(this).find("select[name=number2]").val();
+        var card2 = $(flop).find("select[name=suit2]").val() + $(flop).find("select[name=number2]").val();
         flop_hand.push(card2);
     }
     
     if ($(flop).find("select[name=suit3]").val() != "" && $(flop).find("select[name=number3]").val() != "") {
-        var card2 = $(this).find("select[name=suit3]").val() + $(this).find("select[name=number3]").val();
+        var card3 = $(flop).find("select[name=suit3]").val() + $(flop).find("select[name=number3]").val();
         flop_hand.push(card3);
     }
     
@@ -39,7 +39,6 @@ $("#pokerForm").submit(function(event) {
     var comm_card = $("#turn")
     if ($(comm_card).find("select[name=suit1]").val() != "" && $(comm_card).find("select[name=number1]").val() != "") {
         var card1 = $(comm_card).find("select[name=suit1]").val() + $(comm_card).find("select[name=number1]").val();
-        console.log(card1);
         turn_card=card1;
     }
     
@@ -48,7 +47,6 @@ $("#pokerForm").submit(function(event) {
     var comm_card = $("#river")
     if ($(comm_card).find("select[name=suit1]").val() != "" && $(comm_card).find("select[name=number1]").val() != "") {
         var card1 = $(comm_card).find("select[name=suit1]").val() + $(comm_card).find("select[name=number1]").val();
-        console.log(card1);
         river_card=card1;
     }
     
