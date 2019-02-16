@@ -32,6 +32,19 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# Relax throttling for testing
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100000/second',
+        'user': '100000/second'
+    }
+}
+
 ```
 
 Run `python3 manage.py migrate`
@@ -39,7 +52,7 @@ Run `python3 manage.py migrate`
 ## Running the tests
 My goal with this project is to have 100% test coverage server-side.
 
-`coverage run --source='.' manage.py test runs tests`
+`coverage run --source='.' manage.py test` runs tests
 
 `coverage html` generates the coverage files
 

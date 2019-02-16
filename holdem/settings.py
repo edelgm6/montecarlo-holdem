@@ -137,5 +137,5 @@ django_heroku.settings(locals())
 
 try:
     from holdem.local_settings import *
-except ImportError:
+except ImportError:  # pragma: no cover
     pass

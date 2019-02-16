@@ -82,8 +82,8 @@ class Game:
         self.community = []
         
         self.flop_cards = []
-        self.turn_card = ''
-        self.river_card = ''
+        self.turn_card = turn_card
+        self.river_card = river_card
         cards_to_remove = []
         for card in self.deck.cards:
             if repr(card) in flop_cards:
@@ -93,7 +93,7 @@ class Game:
             elif repr(card) == river_card:
                 self.river_card = card    
             else:
-                continue
+                continue # pragma: no cover
                 
             cards_to_remove.append(card)
             
@@ -222,26 +222,8 @@ class Deck:
         
 class Card:
     def __init__(self, suit, number):
-        self._suit = suit
-        self._number = number
+        self.suit = suit
+        self.number = number
 
     def __repr__(self):
-        return self._suit.value + str(self._number)
-    
-    @property
-    def suit(self):
-        return self._suit
-    
-    @suit.setter
-    def suit(self, suit):
-        if suit not in [suit for suit in Suit]:
-            raise Exception('Suit must be value in Suit enum')
-                                   
-    @property
-    def number(self):
-        return self._number
-
-    @number.setter
-    def number(self, number):
-        if number not in range(2,15):
-            raise Exception('Number must be between 2-14, got ' + number)
+        return self.suit.value + str(self.number)

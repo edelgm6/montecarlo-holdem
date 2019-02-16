@@ -23,8 +23,8 @@ class ResultsView(APIView):
             simulation = serializer.save()
             
             simulation.run_simulation()
-            
             return Response(serializer.data)
-        print(serializer.errors)
-        return Response(serializer.errors)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors)
         
