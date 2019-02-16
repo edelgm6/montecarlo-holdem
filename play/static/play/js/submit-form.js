@@ -2,6 +2,8 @@ jQuery.ajaxSettings.traditional = true
 
 $("#pokerForm").submit(function(event) {
     event.preventDefault();
+    $('.overlay').show();
+    
     
     //Build user hand
     var user_hand = [];
@@ -114,6 +116,7 @@ $("#pokerForm").submit(function(event) {
 
         /* Alerts the results */
         posting.done(function( data ) {
+            $('.overlay').removeAttr('style');
             console.log(data);
             
             writeResults(data);
@@ -176,7 +179,7 @@ function writeResults (data) {
     
     hand_block.find("li").remove();
     
-    $(".run-count").text(runs);
+    $(".run-count").text(runs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     $(".player-count").text(other_count + 1);
     
     var suit_map = {
