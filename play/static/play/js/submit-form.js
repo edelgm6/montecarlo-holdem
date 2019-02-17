@@ -1,4 +1,5 @@
 jQuery.ajaxSettings.traditional = true
+var first_click = true;
 
 $("#pokerForm").submit(function(event) {
     event.preventDefault();
@@ -178,6 +179,11 @@ function successHandler(response) {
 
     createHandsChart(wins, losses, ties);
     createWinChart(data.wins, data.losses, data.ties);
+    
+    if (first_click) {
+        $(window).scrollTo('#results', 800);
+        first_click = false;
+    };
 
 }
 
