@@ -101,9 +101,11 @@ $(".form-check-input").change(function() {
     var hand = $(this).parents(".hand");
     
     if (checked) {
-        hand.find(".form-control").removeAttr("disabled");
+        hand.find(".form-control").removeAttr("disabled")
+        hand.find(".form-control").removeAttr("hidden");
     } else {
         hand.find(".form-control").prop("disabled", true);
+        hand.find(".form-control").prop("hidden", true);
     }
     
     validateForm();
