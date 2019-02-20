@@ -70,6 +70,9 @@ function buildWinSourceChart(wins) {
 
         // Configuration options go here
         options: {
+            legend: {
+                display: false
+            },
             scales: {
                 xAxes: [{
                     stacked: true,
