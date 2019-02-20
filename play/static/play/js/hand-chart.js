@@ -43,6 +43,9 @@ function buildHandsChart(wins, losses, ties) {
                     stacked: true,
                     gridLines: {
                         display: false
+                    },
+                    afterFit: function(scaleInstance) {
+                        scaleInstance.width = 100; // sets the width to 100px
                     }
                 }]
             }

@@ -179,6 +179,7 @@ function successHandler(response) {
 
     createHandsChart(wins, losses, ties);
     createWinChart(data.wins, data.losses, data.ties);
+    createWinSourceChart(wins);
     
     if (first_click) {
         $(window).scrollTo('#results', 800);
@@ -298,6 +299,23 @@ function writeResults (data) {
     
     $('.results').css('visibility', 'visible');
     
+}
+
+function createWinSourceChart (wins) {
+    if (Object.keys(winSourceChart).length==0) {
+        buildWinSourceChart(wins);
+    } else {
+        winSourceChart['data']['datasets'][0]['data'] = [wins[8]];
+        winSourceChart['data']['datasets'][1]['data'] = [wins[7]];
+        winSourceChart['data']['datasets'][2]['data'] = [wins[6]];
+        winSourceChart['data']['datasets'][3]['data'] = [wins[5]];
+        winSourceChart['data']['datasets'][4]['data'] = [wins[4]];
+        winSourceChart['data']['datasets'][5]['data'] = [wins[3]];
+        winSourceChart['data']['datasets'][6]['data'] = [wins[2]];
+        winSourceChart['data']['datasets'][7]['data'] = [wins[1]];
+        winSourceChart['data']['datasets'][8]['data'] = [wins[8]];
+        winSourceChart.update()
+    };
 }
 
 function createWinChart (wins, losses, ties) {
