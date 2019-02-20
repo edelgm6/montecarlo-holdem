@@ -179,7 +179,7 @@ function successHandler(response) {
 
     createHandsChart(wins, losses, ties);
     createWinChart(data.wins, data.losses, data.ties);
-    createWinSourceChart(wins);
+    createWinSourceChart(wins, data.wins);
     
     if (first_click) {
         $(window).scrollTo('#results', 800);
@@ -301,9 +301,9 @@ function writeResults (data) {
     
 }
 
-function createWinSourceChart (wins) {
+function createWinSourceChart (wins, total_wins) {
     if (Object.keys(winSourceChart).length==0) {
-        buildWinSourceChart(wins);
+        buildWinSourceChart(wins, total_wins);
     } else {
         winSourceChart['data']['datasets'][0]['data'] = [wins[8]];
         winSourceChart['data']['datasets'][1]['data'] = [wins[7]];

@@ -3,7 +3,7 @@ var winSourceChart = {};
 
 ["Straight flush", "Four of a kind", "Full house", "Flush", "Straight", "Three of a kind", "Two pair", "Pair", "High card"]
 
-function buildWinSourceChart(wins) {
+function buildWinSourceChart(wins, total_wins) {
     console.log(wins);
     winSourceChart = new Chart(winSourceChartCtx, {
         // The type of chart we want to create
