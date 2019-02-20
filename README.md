@@ -48,6 +48,7 @@ REST_FRAMEWORK = {
 ```
 
 Run `python manage.py migrate`
+
 Run `python manage.py collectstatic`
 
 ## Running the tests
