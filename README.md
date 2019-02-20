@@ -8,7 +8,7 @@ Requirements: Python 3
 
 Getting set up locally is simple. Once you've cloned the project:
 
-`Run pip install requirements.txt`
+Run `pip install requirements.txt`
 
 Set up a local_settings.py file and drop it in the holdem/ folder where the settings.py file lives
 
