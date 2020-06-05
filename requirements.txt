@@ -1,6 +1,6 @@
 coverage==4.5.2
 dj-database-url==0.5.0
-Django==2.1.7
+Django==2.2.13
 django-heroku==0.3.1
 djangorestframework==3.9.0
 gunicorn==19.9.0
