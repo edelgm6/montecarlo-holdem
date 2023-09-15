@@ -3,6 +3,8 @@ dj-database-url==2.1.0
 Django==4.2.5
 django-heroku==0.3.1
 djangorestframework==3.14.0
+gunicorn==21.2.0
+packaging==23.1
 psycopg2==2.9.7
 pytz==2023.3.post1
 sqlparse==0.4.4
