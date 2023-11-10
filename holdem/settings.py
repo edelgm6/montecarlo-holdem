@@ -3,7 +3,7 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+TEMPLATE_DIR = os.path.join(BASE_DIR,'play/templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -13,9 +13,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']
 
+STATIC_ROOT = BASE_DIR + "staticfiles"
+STATIC_URL = '/play/static/'
+STATICFILES_DIRS = (
+   os.path.join(BASE_DIR, 'play/static'),
+)
 
 # Application definition
 
@@ -46,7 +53,7 @@ ROOT_URLCONF = 'holdem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,13 +81,11 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {
-    "default": dj_database_url.config(
-        conn_max_age=600,
-        conn_health_checks=True,
-        ssl_require=True,
-    ),
-}
+DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
+DATABASES["default"].update({
+    "ENGINE": "django.db.backends.postgresql_psycopg2",
+    "OPTIONS": {"connect_timeout": 5}
+})
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -112,12 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-
-STATIC_ROOT = BASE_DIR + "/staticfiles"
-STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
